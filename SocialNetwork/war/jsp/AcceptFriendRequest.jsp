@@ -7,6 +7,13 @@
 </head>
 <body>
 
+<script language="JavaScript">
+function formSubmitter(formTag, messageTag){
+  document.getElementById(messageTag).innerHTML = "You Are Now Friends";
+  document.forms[formTag].submit();
+}
+
+</script>
 
  
     
@@ -26,8 +33,16 @@ ${it.mails}
  
   Input Email : <input type="text" name="friendEmail"/> <br>
 <input type="hidden" name="myEmail" value ="${it.mail}">
-  <input type="submit" value="Accept Friend Request">
+  <input type="submit" value="Accept Friend Request" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
   </form>
+<br>
+
+<!-- Back Home  -->
+<form action="/social/backHome" method="get">
+ 
+  <input type="submit" value="Back To  HomePage">
+  </form>
+  <br>
 
 
 

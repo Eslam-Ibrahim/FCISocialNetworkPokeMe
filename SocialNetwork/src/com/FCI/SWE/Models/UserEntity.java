@@ -1,6 +1,10 @@
 package com.FCI.SWE.Models;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -146,7 +150,9 @@ public class UserEntity {
 		employee.setProperty("email", this.email);
 		employee.setProperty("password", this.password);
 		datastore.put(employee);
-
+        // Add notification
+		String content = "You Have Joind PokeME!";
+		UserEntity.saveNotification(this.email, this.email, content);
 		return true;
 
 	}
@@ -196,6 +202,9 @@ public class UserEntity {
 		tempRecord.setProperty("friendMail",friendEmail );
 		tempRecord.setProperty("Status",0);
 		datastore.put(tempRecord);
+		// Add notification
+	    String content = myEmail+" Has just sent to you a Friend Request";
+	    UserEntity.saveNotification(myEmail, friendEmail, content);
 	}
 	
 	
@@ -229,7 +238,7 @@ public class UserEntity {
 			
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
-			// Eslam Osama Idea to Swap friendMail with uesrMail made to fix the naming mistake made in google datastore friend table
+			// Eslam Osama Idea to Swap friendMail with uesrMail , made to fix the naming mistake made in google datastore friend table
 			Filter mailFilter = new FilterPredicate("friendMail", FilterOperator.EQUAL,UserMail);
 		
 		     Filter friendMailFilter = new FilterPredicate("myMail", FilterOperator.EQUAL,friendMail);
@@ -243,5 +252,210 @@ public class UserEntity {
 			result.setProperty("friendMail",friendMail);
 			result.setProperty("Status",1);
 			datastore.put(result);
-		}
+			// Add notification
+		    String content = UserMail+" Has just Accepted your Friend Request";
+		    UserEntity.saveNotification(UserMail, friendMail, content);
+                 //////////////////////////////////////////////////DUPLICATING ROW - Two Ways FriendShip/////////////////////////
+            Query gaeQuery2 = new Query("Friends");
+            PreparedQuery pq2 = datastore.prepare(gaeQuery2);
+            List<Entity> list = pq2.asList(FetchOptions.Builder.withDefaults());
+            int tempID;
+            if (list.isEmpty())
+             {
+              tempID = 0;
+             }
+             else
+             {tempID = list.size();}
+
+            Entity tempRecord = new Entity("Friends", tempID+ 1);
+
+            tempRecord.setProperty("myMail", friendMail);
+            tempRecord.setProperty("friendMail",UserMail);
+            tempRecord.setProperty("Status",1);
+            datastore.put(tempRecord);
 }
+		
+		// Save Notification
+				public static void saveNotification(String senderMail , String receiverMail , String content) {
+					
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+					// Determine Notification Date
+					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		            Date newDate = new Date();
+		            newDateFormat.format(newDate);
+		            int date = newDate.getDate();
+		            int month = newDate.getMonth() + 1;
+		            int year = newDate.getYear() + 1900;
+		            String notificationDate = date + "/" + month + "/" + year;
+		            Query gaeQuery = new Query("Notifications");
+		    		PreparedQuery pq = datastore.prepare(gaeQuery);
+		    		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+		    		int tempID;
+		            if (list.isEmpty())
+		            {
+		            	tempID = 0;
+		            }
+		            else
+		            {tempID = list.size();}
+		            
+		    		Entity tempRecord = new Entity("Notifications", tempID+ 1);
+
+		    		tempRecord.setProperty("sender", senderMail);
+		    		tempRecord.setProperty("receiver",receiverMail );
+		    		tempRecord.setProperty("date",notificationDate);
+		    		tempRecord.setProperty("content",content);
+		    		datastore.put(tempRecord);
+		            
+				}
+				
+				// Retrieve Notifications
+				public static ArrayList <String> retrieveNotifications (String receiverMail) {
+					
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+					ArrayList<String> retNotifications = new ArrayList<>();
+					// Determine Notification Date
+					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		            Date newDate = new Date();
+		            newDateFormat.format(newDate);
+		            int date = newDate.getDate();
+		            int month = newDate.getMonth() + 1;
+		            int year = newDate.getYear() + 1900;
+		            String notificationDate = date + "/" + month + "/" + year;
+		            
+		         Filter mailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);	
+		   	     Filter dateFilter = new FilterPredicate("date", FilterOperator.EQUAL,notificationDate);
+		   		//Use CompositeFilter to combine multiple filters
+		   		Filter CompositeFilter = CompositeFilterOperator.and(mailFilter, dateFilter);
+		   		// Use class Query to assemble a query
+		   		Query gaeQuery = new Query("Notifications").setFilter(CompositeFilter);
+		   		PreparedQuery pq = datastore.prepare(gaeQuery);
+		   		for (Entity entity : pq.asIterable()) {
+		   			String notificationContent="";
+		   			notificationContent = entity.getProperty("content").toString() + " --> ";
+		   			notificationContent += entity.getProperty("date").toString();
+		   			retNotifications.add(notificationContent);
+		   		}
+		   		
+		   		for (int i = 0; i < retNotifications.size(); i++) {
+		   			
+		   			System.out.println("runOutput: "+retNotifications.get(i));
+		   		}
+		            return retNotifications;
+				
+         }
+				
+		// Retrieve Friends for single chat
+				public static ArrayList <String> retrieveFriendsForSingleChat(String UserMail) {
+					ArrayList <String> requestNames = new ArrayList<>();
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+					// Eslam Osama Idea to Swap friendMail with uesrMail made to fix the naming mistake made in google datastore friend table
+					
+					Filter mailFilter = new FilterPredicate("myMail", FilterOperator.EQUAL,UserMail);
+					
+				     Filter statusFilter = new FilterPredicate("Status", FilterOperator.EQUAL,1);
+					//Use CompositeFilter to combine multiple filters
+					
+				     Filter CompositeFilter = CompositeFilterOperator.and(mailFilter, statusFilter);
+
+					// Use class Query to assemble a query
+					Query gaeQuery = new Query("Friends").setFilter(CompositeFilter);
+					PreparedQuery pq = datastore.prepare(gaeQuery);
+					for (Entity entity : pq.asIterable()) {
+					requestNames.add(entity.getProperty("friendMail").toString());
+					}
+					for (int i = 0; i < requestNames.size(); i++) 
+					{
+						System.out.println("retrieveChatMail"+requestNames.get(i));
+					}
+					return requestNames;
+				}
+				
+				// Save Message
+				public static void saveMessage(String senderMail , String receiverMail , String content) {
+					
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+					// Determine Message Date
+					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		            Date newDate = new Date();
+		            newDateFormat.format(newDate);
+		            int date = newDate.getDate();
+		            int month = newDate.getMonth() + 1;
+		            int year = newDate.getYear() + 1900;
+		            String MessageDate = date + "/" + month + "/" + year;
+		            Query gaeQuery = new Query("Messages");
+		    		PreparedQuery pq = datastore.prepare(gaeQuery);
+		    		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+		    		int tempID;
+		            if (list.isEmpty())
+		            {
+		            	tempID = 0;
+		            }
+		            else
+		            {tempID = list.size();}
+		            
+		    		Entity tempRecord = new Entity("Messages", tempID+ 1);
+
+		    		tempRecord.setProperty("sender", senderMail);
+		    		tempRecord.setProperty("receiver",receiverMail );
+		    		tempRecord.setProperty("date",MessageDate);
+		    		tempRecord.setProperty("content",content);
+		    		datastore.put(tempRecord);
+		    		// Add notification
+		    	    String Notificationcontent = senderMail+" Has just sent to you a Message";
+		    	    UserEntity.saveNotification(senderMail, receiverMail, Notificationcontent);
+				}
+				
+				// Retrieve Messages
+				public static ArrayList <String> retrieveMessages (String receiverMail , String senderMail) {
+					
+					DatastoreService datastore = DatastoreServiceFactory
+							.getDatastoreService();
+					ArrayList<String> retMessages = new ArrayList<>();
+		          // Friend --> current user  (1)
+		         Filter senderMailFilter = new FilterPredicate("sender", FilterOperator.EQUAL,senderMail);	
+		   	     Filter recieverMailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);
+		   		//Use CompositeFilter to combine multiple filters
+		   		Filter CompositeFilter1 = CompositeFilterOperator.and(senderMailFilter, recieverMailFilter);
+		   		// current user --> Friend   (2)
+		   		Filter senderMailFilter2 = new FilterPredicate("sender", FilterOperator.EQUAL,receiverMail);	
+		   	     Filter recieverMailFilter2 = new FilterPredicate("receiver", FilterOperator.EQUAL,senderMail);
+		   		//Use CompositeFilter to combine multiple filters
+		   		Filter CompositeFilter2 = CompositeFilterOperator.and(senderMailFilter2, recieverMailFilter2);
+		   		// combine (1) OR (2)
+		   		Filter FinalCompositeFilter = CompositeFilterOperator.or (CompositeFilter1,CompositeFilter2);
+		   		// Use class Query to assemble a query
+		   		Query gaeQuery = new Query("Messages").setFilter(FinalCompositeFilter);
+		   		PreparedQuery pq = datastore.prepare(gaeQuery);
+		   		//System.out.println("senderMail-> "+senderMail + " ,receiverMail-> "+receiverMail);
+		   		for (Entity entity : pq.asIterable()) {
+		   			//System.out.println("I am Here in retMessage");
+		   			//if((entity.getProperty("sender").equals(senderMail)&&entity.getProperty("receiver").equals(receiverMail))||
+		   		      //  (entity.getProperty("sender").equals(receiverMail)&&entity.getProperty("receiver").equals(senderMail)))
+		   			{
+		   				//System.out.println("I am Here in retMessage condition");
+		   			String messageRecord="";
+		   			messageRecord = entity.getProperty("sender").toString() + " Said: ";
+		   			messageRecord += entity.getProperty("content").toString() + " on: ";
+		   			messageRecord += entity.getProperty("date").toString();
+		   			retMessages.add(messageRecord);
+		   		    }
+		   		}
+		            return retMessages;
+				
+         }
+				
+				
+				
+				
+				
+				
+				
+				
+}
+
+
+

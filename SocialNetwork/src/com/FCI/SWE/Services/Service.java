@@ -144,4 +144,55 @@ public class Service {
 
 }
 	
+	@POST
+	@Path("/retrieveNotifications")
+	public String retrieveNotifications(@FormParam("myEmail") String receiverMail) {
+		JSONObject object = new JSONObject();
+	
+		object.put("Notification", UserEntity.retrieveNotifications(receiverMail));
+		System.out.println(object.toString());
+		return object.toString();
+}
+	@POST
+	@Path("/sendMessage")
+	public String sendMessage(@FormParam("senderMail") String senderMail , @FormParam("recieverMail") String receiverMail 
+	,@FormParam("messageContents") String content) {
+		JSONObject object = new JSONObject();
+		UserEntity.saveMessage(senderMail, receiverMail, content);
+		object.put("Status", "OK");
+		return object.toString();
+		
+}
+	
+	@POST
+	@Path("/retrieveFriendsForSingleChat")
+	public String retrieveFriendsForSingleChat(@FormParam("myEmail") String myEmail) {
+		JSONObject object = new JSONObject();
+		object.put("Email", UserEntity.retrieveFriendsForSingleChat(myEmail));
+		System.out.println(object.toString());
+		return object.toString();
+	
+
+}
+	@POST
+	@Path("/retrieveFriendsRetrieveMessages")
+	public String retrieveFriendsRetrieveMessages(@FormParam("myEmail") String myEmail) {
+		JSONObject object = new JSONObject();
+		object.put("Email", UserEntity.retrieveFriendsForSingleChat(myEmail));
+		System.out.println(object.toString());
+		return object.toString();
+	
+
+	}
+
+	
+	@POST
+	@Path("/RetriveMessageHistory")
+	public String RetriveMessageHistory(@FormParam("receiverMail") String receiverMail , @FormParam("senderMail") String senderMail) {
+		JSONObject object = new JSONObject();
+		object.put("Messages", UserEntity.retrieveMessages(receiverMail, senderMail));
+		System.out.println(object.toString());
+		return object.toString();
+}	
+	
 }

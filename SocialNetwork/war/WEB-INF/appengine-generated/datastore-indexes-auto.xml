@@ -1,11 +1,4 @@
-<!-- Indices written at Thu, 12 Mar 2015 17:29:36 EET -->
+<!-- Indices written at Thu, 26 Mar 2015 14:49:58 EET -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Friends" ancestor="false" source="auto">
-        <property name="friendMail" direction="asc"/>
-        <property name="Status" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>

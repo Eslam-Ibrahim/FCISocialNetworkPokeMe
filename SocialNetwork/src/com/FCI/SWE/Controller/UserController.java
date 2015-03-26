@@ -77,7 +77,10 @@ public class UserController {
 	@GET
 	@Path("/backHome")
 	public Response backHome() {
-		return Response.ok(new Viewable("/jsp/home")).build();
+		// Update here by Eslam Osama - current User Mail was not transfered to home page again. (loosing Data) 
+		 Map<String, String> map = new HashMap<String, String>();
+		    map.put("email",UserController.userMail);
+		return Response.ok(new Viewable("/jsp/home",map)).build();
 	}
 
 	/**
@@ -115,7 +118,8 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
-		String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/RegistrationService";
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/RegistrationService";
+		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		
 		
 		try {
@@ -186,8 +190,8 @@ public class UserController {
 	public Response SendFriendRequest(@FormParam("myEmail") String myEmail , @FormParam("friendEmail") String friendEmail) {
 		// service to search friend
 		System.out.println("I am here");
-		String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/SendFriendRequest";
-		
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/SendFriendRequest";
+		String serviceUrl = "http://localhost:8888/rest/SendFriendRequest";
 		try {
 			System.out.println("I am here in try");
 			URL url = new URL(serviceUrl);
@@ -249,7 +253,8 @@ public class UserController {
 	@Produces("text/html")
 	public Response home(@FormParam("uname") String uname,
 			@FormParam("password") String pass) {
-		String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/LoginService";
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/LoginService";
+		String serviceUrl = "http://localhost:8888/rest/LoginService";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -315,7 +320,8 @@ public class UserController {
 	@Path("/ResponseRetrieveFriendRequests")
 	@Produces("text/html")
 	public Response retrieveFriendRequests(@FormParam("myEmail") String myEmail) {
-		String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendRequests";
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendRequests";
+		String serviceUrl = "http://localhost:8888/rest/retrieveFriendRequests";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -358,7 +364,7 @@ public class UserController {
 		    map.put("mail", UserController.userMail);
 		  //  System.out.println(map.get("mails"));
 			if (map.isEmpty())
-			return Response.ok(new Viewable("/jsp/searchUserFailed")).build();
+			return Response.ok(new Viewable("/jsp/AcceptFriendRequest")).build();
 		
 			
 	
@@ -382,8 +388,9 @@ public class UserController {
 	@POST
 	@Path("/ResponseAcceptFriendRequest")
 	@Produces("text/html")
-	public String acceptFriendRequest(@FormParam("myEmail") String myEmail , @FormParam("friendEmail") String friendEmail) {
-		String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/AcceptFriendRequest";
+	public void acceptFriendRequest(@FormParam("myEmail") String myEmail , @FormParam("friendEmail") String friendEmail) {
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/AcceptFriendRequest";
+		String serviceUrl = "http://localhost:8888/rest/AcceptFriendRequest";
 		
 		try {
 			URL url = new URL(serviceUrl);
@@ -408,7 +415,7 @@ public class UserController {
 					connection.getInputStream()));
 			writer.close();
 			reader.close();
-			return "You are now Friends :)";
+			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -417,7 +424,333 @@ public class UserController {
 			e.printStackTrace();
 	}  
 
+		
+
+	}
+	
+	
+	@POST
+	@Path("/ResponseRetrieveNotifications")
+	@Produces("text/html")
+	public Response retrieveNotifications(@FormParam("myEmail") String myEmail) {
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveNotifications";
+		String serviceUrl = "http://localhost:8888/rest/retrieveNotifications";
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters ="myEmail=" + myEmail;
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+
+			String line ,retjson= "";
+			Map<String, String> map = new HashMap<String, String>();
+			while ((line = reader.readLine()) != null) {
+				retjson+=line;
+			}
+			writer.close();
+			reader.close();
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(retjson);
+		    JSONObject object = (JSONObject) obj;
+		    JSONArray list= (JSONArray) object.get("Notification");
+		    String retNotifications = "";
+		    String newLine = "\n";
+		    for(Integer i=0;i<list.size();i++){
+					
+		    	retNotifications+=list.get(i).toString().concat(" | "+"\n");
+		    }
+		    map.put("Notifications",retNotifications);
+		    map.put("email", UserController.userMail);
+		  //  System.out.println(map.get("retNotifications"));
+			if (map.isEmpty())
+				return Response.ok(new Viewable("/jsp/retrieveNotifications")).build();
+		
+			
+	
+			return Response.ok(new Viewable("/jsp/retrieveNotifications",map)).build();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}  catch (ParseException e){
+		e.printStackTrace();
+	}
+
 		return null;
 
 	}
+	
+	    @POST
+		@Path("/ResponseRetrieveFriendsSendMessage")
+		@Produces("text/html")
+		public Response retrieveFriendsForSingleChat(@FormParam("myEmail") String myEmail) {
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsForSingleChat";
+			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsForSingleChat";
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters ="myEmail=" + myEmail;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String line ,retjson= "";
+				Map<String, String> map = new HashMap<String, String>();
+				while ((line = reader.readLine()) != null) {
+					retjson+=line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(retjson);
+			    JSONObject object = (JSONObject) obj;
+			    
+			    JSONArray list= (JSONArray) object.get("Email");
+			    String retNames = "";
+			    for(Integer i=0;i<list.size();i++){
+						
+			    	 retNames+=list.get(i).toString().concat(" | "+"\n");
+			    }
+			    map.put("mails",retNames);
+			    map.put("email", UserController.userMail);
+			 	
+			  ////////////////////User has no friends/////////////
+			    if (map.isEmpty()) 
+				{return Response.ok(new Viewable("/jsp/ViewFriendsForSingleChat")).build();}
+			//////////////////////////////////////////////////
+				return Response.ok(new Viewable("/jsp/ViewFriendsForSingleChat",map)).build();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}  catch (ParseException e){
+			e.printStackTrace();
+		}
+
+			return null;
+
+		}
+	
+	    
+	    @POST
+		@Path("/ResponseSendMessage")
+		@Produces("text/html")
+		public void responseSendMessage(@FormParam("senderMail") String senderMail , @FormParam("recieverMail") String receiverMail 
+				,@FormParam("messageContents") String content) {
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/sendMessage";
+			String serviceUrl = "http://localhost:8888/rest/sendMessage";
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters = "senderMail=" + senderMail + "&recieverMail=" + receiverMail
+						+ "&messageContents=" + content;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String line ,retjson= "";
+				Map<String, String> map = new HashMap<String, String>();
+				while ((line = reader.readLine()) != null) {
+					retjson+=line;
+				}
+				writer.close();
+				reader.close();			
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+
+			
+
+		}
+	    
+	    
+	    @POST
+		@Path("/ResponseRetrieveMessage")
+		@Produces("text/html")
+		public Response ResponseRetrieveMessage(@FormParam("myEmail") String myEmail) {
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsRetrieveMessages";
+			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsRetrieveMessages";
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters ="myEmail=" + myEmail;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String line ,retjson= "";
+				Map<String, String> map = new HashMap<String, String>();
+				while ((line = reader.readLine()) != null) {
+					retjson+=line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(retjson);
+			    JSONObject object = (JSONObject) obj;
+			    
+			    JSONArray list= (JSONArray) object.get("Email");
+			    String retMails = "";
+			    for(Integer i=0;i<list.size();i++){
+						
+			    	retMails+=list.get(i).toString().concat(" | "+"\n");
+			    }
+			    map.put("mails",retMails);
+			    map.put("myEmail", UserController.userMail);
+			 	
+
+			    if (map.isEmpty()) 
+				{return Response.ok(new Viewable("/jsp/retrieveFriendsRetrieveMessages")).build();}
+
+				return Response.ok(new Viewable("/jsp/retrieveFriendsRetrieveMessages",map)).build();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}  catch (ParseException e){
+			e.printStackTrace();
+		}
+
+			return null;
+
+		}
+	    
+	    
+	    @POST
+		@Path("/ResponseRetriveMessageHistory")
+		@Produces("text/html")
+		public Response ResponseRetriveMessageHistory(@FormParam("receiverMail") String receiverMail , @FormParam("senderMail") String senderMail) {
+			//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/RetriveMessageHistory";
+			String serviceUrl = "http://localhost:8888/rest/RetriveMessageHistory";
+			
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters = "receiverMail=" + receiverMail+"&senderMail=" + senderMail ;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String line ,retjson= "";
+				Map<String, String> map = new HashMap<String, String>();
+				while ((line = reader.readLine()) != null) {
+					retjson+=line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse(retjson);
+			    JSONObject object = (JSONObject) obj;
+			    JSONArray list= (JSONArray) object.get("Messages");
+			    String retMessages = "";
+			   // String newLine = "\n";
+			    for(Integer i=0;i<list.size();i++){
+						
+			    	retMessages+=list.get(i).toString();
+			    	retMessages+="\n";
+			    }
+			    map.put("Messages",retMessages);
+			    map.put("email", UserController.userMail);
+			    map.put("friendMail", senderMail);
+			  //  System.out.println(map.get("retMessages"));
+				if (map.isEmpty())
+					return Response.ok(new Viewable("/jsp/retrieveMessages")).build();
+			
+				
+		
+				return Response.ok(new Viewable("/jsp/retrieveMessages",map)).build();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}  catch (ParseException e){
+			e.printStackTrace();
+		}
+
+			return null;
+
+		}
+
+	    
+	
+
 }
