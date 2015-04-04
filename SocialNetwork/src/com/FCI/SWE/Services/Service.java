@@ -163,17 +163,7 @@ public class Service {
 		return object.toString();
 		
 }
-	
-	@POST
-	@Path("/retrieveFriendsForSingleChat")
-	public String retrieveFriendsForSingleChat(@FormParam("myEmail") String myEmail) {
-		JSONObject object = new JSONObject();
-		object.put("Email", UserEntity.retrieveFriendsForSingleChat(myEmail));
-		System.out.println(object.toString());
-		return object.toString();
-	
 
-}
 	@POST
 	@Path("/retrieveFriendsRetrieveMessages")
 	public String retrieveFriendsRetrieveMessages(@FormParam("myEmail") String myEmail) {
@@ -185,6 +175,7 @@ public class Service {
 
 	}
 
+	
 	
 	@POST
 	@Path("/RetriveMessageHistory")

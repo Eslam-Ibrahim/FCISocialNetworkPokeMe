@@ -415,6 +415,8 @@ public class UserEntity {
 					DatastoreService datastore = DatastoreServiceFactory
 							.getDatastoreService();
 					ArrayList<String> retMessages = new ArrayList<>();
+					System.out.println("sender: "+senderMail);
+					System.out.println("receiver: "+receiverMail);
 		          // Friend --> current user  (1)
 		         Filter senderMailFilter = new FilterPredicate("sender", FilterOperator.EQUAL,senderMail);	
 		   	     Filter recieverMailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);

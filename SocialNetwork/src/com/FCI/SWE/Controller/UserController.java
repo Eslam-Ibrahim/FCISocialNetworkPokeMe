@@ -496,74 +496,7 @@ public class UserController {
 		return null;
 
 	}
-	
-	    @POST
-		@Path("/ResponseRetrieveFriendsSendMessage")
-		@Produces("text/html")
-		public Response retrieveFriendsForSingleChat(@FormParam("myEmail") String myEmail) {
-	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsForSingleChat";
-			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsForSingleChat";
-			try {
-				URL url = new URL(serviceUrl);
-				String urlParameters ="myEmail=" + myEmail;
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
-				connection.setDoOutput(true);
-				connection.setDoInput(true);
-				connection.setInstanceFollowRedirects(false);
-				connection.setRequestMethod("POST");
-				connection.setConnectTimeout(60000);  //60 Seconds
-				connection.setReadTimeout(60000);  //60 Seconds
-				
-				connection.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded;charset=UTF-8");
-				OutputStreamWriter writer = new OutputStreamWriter(
-						connection.getOutputStream());
-				writer.write(urlParameters);
-				writer.flush();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
-						connection.getInputStream()));
 
-				String line ,retjson= "";
-				Map<String, String> map = new HashMap<String, String>();
-				while ((line = reader.readLine()) != null) {
-					retjson+=line;
-				}
-				writer.close();
-				reader.close();
-				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(retjson);
-			    JSONObject object = (JSONObject) obj;
-			    
-			    JSONArray list= (JSONArray) object.get("Email");
-			    String retNames = "";
-			    for(Integer i=0;i<list.size();i++){
-						
-			    	 retNames+=list.get(i).toString().concat(" | "+"\n");
-			    }
-			    map.put("mails",retNames);
-			    map.put("email", UserController.userMail);
-			 	
-			  ////////////////////User has no friends/////////////
-			    if (map.isEmpty()) 
-				{return Response.ok(new Viewable("/jsp/ViewFriendsForSingleChat")).build();}
-			//////////////////////////////////////////////////
-				return Response.ok(new Viewable("/jsp/ViewFriendsForSingleChat",map)).build();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}  catch (ParseException e){
-			e.printStackTrace();
-		}
-
-			return null;
-
-		}
-	
-	    
 	    @POST
 		@Path("/ResponseSendMessage")
 		@Produces("text/html")

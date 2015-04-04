@@ -17,6 +17,13 @@ th {
 </head>
 
 <body>
+<script language="JavaScript">
+function formSubmitter(formTag, messageTag){
+  document.getElementById(messageTag).innerHTML = "Message Sent";
+  document.forms[formTag].submit();
+}
+
+</script>
 
 
 
@@ -33,6 +40,25 @@ th {
   
 </table>
 
+<br>
+
+<br>
+<br>
+
+<form action="/social/ResponseSendMessage" method="post">
+ 
+Message : <input type="text" name="messageContents" /> <br>
+<input type="hidden" name="recieverMail" value ="${it.friendMail}">
+<input type="hidden" name="senderMail" value ="${it.email}">
+<input type="submit" value="Send Message" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
+
+</form>
+<br>
+<form action="/social/ResponseRetriveMessageHistory" method="post">
+<input type="hidden" name="senderMail" value ="${it.friendMail}">
+<input type="hidden" name="receiverMail" value ="${it.email}">
+<input type="submit" value="Refresh">
+</form>
 <br>
 <!-- Back Home  -->
 <form action="/social/backHome" method="get">

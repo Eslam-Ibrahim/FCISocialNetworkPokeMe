@@ -242,21 +242,12 @@ a:hover {
 
 </td>
 
-<td>
-     <!-- Send Message  -->
- <form action="/social/ResponseRetrieveFriendsSendMessage" method="post">
-<input type="hidden" name="myEmail" value ="${it.email}">
-  <input type="submit" value="Send Message">
 
-  </form>
-
-</td>
-     
 <td>
      <!-- Retrieve Message History  -->
  <form action="/social/ResponseRetrieveMessage" method="post">
 <input type="hidden" name="myEmail" value ="${it.email}">
-  <input type="submit" value="Retrieve Messages">
+  <input type="submit" value="Messages">
 
   </form>
 
