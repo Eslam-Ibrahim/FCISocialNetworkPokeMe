@@ -27,6 +27,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 
 
 /**
+ *done
  * <h1>User Entity class</h1>
  * <p>
  * This class will act as a model for user, it will holds user data
