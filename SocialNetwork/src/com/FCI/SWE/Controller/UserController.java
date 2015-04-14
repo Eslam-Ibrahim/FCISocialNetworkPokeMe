@@ -27,6 +27,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.FCI.SWE.Models.UserEntity;
+import com.FCI.SWE.Models.UserPost;
 import com.google.apphosting.utils.config.ClientDeployYamlMaker.Request;
 
 /**
@@ -345,24 +346,26 @@ public class UserController {
 					connection.getInputStream()));
 
 			String line ,retjson= "";
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, ArrayList<UserEntity>> map = new HashMap<String, ArrayList<UserEntity>>();
 			while ((line = reader.readLine()) != null) {
 				retjson+=line;
 			}
 			writer.close();
 			reader.close();
 			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(retjson);
-		    JSONObject object = (JSONObject) obj;
-		    JSONArray list= (JSONArray) object.get("Email");
-		    String retNames = "";
-		    for(Integer i=0;i<list.size();i++){
-					
-		    	 retNames+=list.get(i).toString() + "\n";
-		    }
-		    map.put("mails",retNames);
-		    map.put("mail", UserController.userMail);
-		  //  System.out.println(map.get("mails"));
+			JSONArray retArr = (JSONArray) parser.parse(retjson);
+			ArrayList<UserEntity> retNames = new ArrayList<>();
+			for (int i = 0; i < retArr.size(); ++i) {
+				JSONObject object  = (JSONObject) retArr.get(i);
+				retNames.add(UserEntity.parseUserInfo(object.toJSONString()));
+			}
+			// Dummy User to save current user mail ---> Eslam Osama's Idea
+			ArrayList<UserEntity> userMail = new ArrayList<>();
+			UserEntity retMail = new UserEntity("", UserController.userMail, "", "");
+		    userMail.add(retMail);
+		    map.put("requests",retNames);
+		    map.put("mail", userMail);
+
 			if (map.isEmpty())
 			return Response.ok(new Viewable("/jsp/AcceptFriendRequest")).build();
 		
@@ -428,81 +431,12 @@ public class UserController {
 
 	}
 	
-	
-	@POST
-	@Path("/ResponseRetrieveNotifications")
-	@Produces("text/html")
-	public Response retrieveNotifications(@FormParam("myEmail") String myEmail) {
-		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveNotifications";
-		String serviceUrl = "http://localhost:8888/rest/retrieveNotifications";
-		
-		try {
-			URL url = new URL(serviceUrl);
-			String urlParameters ="myEmail=" + myEmail;
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			connection.setInstanceFollowRedirects(false);
-			connection.setRequestMethod("POST");
-			connection.setConnectTimeout(60000);  //60 Seconds
-			connection.setReadTimeout(60000);  //60 Seconds
-			
-			connection.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded;charset=UTF-8");
-			OutputStreamWriter writer = new OutputStreamWriter(
-					connection.getOutputStream());
-			writer.write(urlParameters);
-			writer.flush();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
-
-			String line ,retjson= "";
-			Map<String, String> map = new HashMap<String, String>();
-			while ((line = reader.readLine()) != null) {
-				retjson+=line;
-			}
-			writer.close();
-			reader.close();
-			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(retjson);
-		    JSONObject object = (JSONObject) obj;
-		    JSONArray list= (JSONArray) object.get("Notification");
-		    String retNotifications = "";
-		    String newLine = "\n";
-		    for(Integer i=0;i<list.size();i++){
-					
-		    	retNotifications+=list.get(i).toString().concat(" | "+"\n");
-		    }
-		    map.put("Notifications",retNotifications);
-		    map.put("email", UserController.userMail);
-		  //  System.out.println(map.get("retNotifications"));
-			if (map.isEmpty())
-				return Response.ok(new Viewable("/jsp/retrieveNotifications")).build();
-		
-			
-	
-			return Response.ok(new Viewable("/jsp/retrieveNotifications",map)).build();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-	}  catch (ParseException e){
-		e.printStackTrace();
-	}
-
-		return null;
-
-	}
-
 	    @POST
 		@Path("/ResponseSendMessage")
 		@Produces("text/html")
 		public void responseSendMessage(@FormParam("senderMail") String senderMail , @FormParam("recieverMail") String receiverMail 
 				,@FormParam("messageContents") String content) {
-	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/sendMessage";
+	    //	String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/sendMessage";
 			String serviceUrl = "http://localhost:8888/rest/sendMessage";
 			try {
 				URL url = new URL(serviceUrl);
@@ -574,24 +508,26 @@ public class UserController {
 						connection.getInputStream()));
 
 				String line ,retjson= "";
-				Map<String, String> map = new HashMap<String, String>();
+				Map<String, ArrayList<UserEntity>> map = new HashMap<String, ArrayList<UserEntity>>();
 				while ((line = reader.readLine()) != null) {
 					retjson+=line;
 				}
 				writer.close();
 				reader.close();
 				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(retjson);
-			    JSONObject object = (JSONObject) obj;
-			    
-			    JSONArray list= (JSONArray) object.get("Email");
-			    String retMails = "";
-			    for(Integer i=0;i<list.size();i++){
-						
-			    	retMails+=list.get(i).toString().concat(" | "+"\n");
-			    }
-			    map.put("mails",retMails);
-			    map.put("myEmail", UserController.userMail);
+				JSONArray retArr = (JSONArray) parser.parse(retjson);
+				ArrayList<UserEntity> retNames = new ArrayList<>();
+				for (int i = 0; i < retArr.size(); ++i) {
+					JSONObject object  = (JSONObject) retArr.get(i);
+					retNames.add(UserEntity.parseUserInfo(object.toJSONString()));
+				}
+				// Dummy Post to save current user mail ---> Eslam Osama's Idea
+				ArrayList<UserEntity> userMail = new ArrayList<>();
+				UserEntity retMail = new UserEntity("", UserController.userMail, "", "");
+			    userMail.add(retMail);
+			    map.put("mails",retNames);
+			    map.put("mail", userMail);
+
 			 	
 
 			    if (map.isEmpty()) 

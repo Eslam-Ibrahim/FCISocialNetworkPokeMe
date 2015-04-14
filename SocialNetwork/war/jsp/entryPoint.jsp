@@ -159,7 +159,7 @@ h3 {
 }
 h5 {
     font-size: 20px;
-    color: #cf9118;
+    color: red;
     margin: 1em 0;
     text-align: center;
 }
@@ -185,12 +185,12 @@ img.right { float: right; margin-left: 14px; }
     clear: both;
 }
 a {
-    color: #f0b33c;
+    color: blue;
     font-weight: bold;
     text-decoration: none;
 }
 a:visited {
-    color: #cf9118;
+    color: blue;
 }
 a:hover {
     text-decoration: underline;

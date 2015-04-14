@@ -203,7 +203,7 @@ a:hover {
     
     <div id="background">
         <h5> Welcome ${it.email}  <ul><li><a href="/social/backtoEntryPoint"> Sign Out</a></li></ul></h5>   
-             <table>
+<table>
   <tr>
  <td>
 <!-- search friend  -->
@@ -221,10 +221,7 @@ a:hover {
     <br>
   </td>
   
-<td>
-    
-        
-        
+<td>    
 <!-- Retrieve friend Request  -->
 <form action="/social/ResponseRetrieveFriendRequests" method="post">
  
@@ -234,7 +231,7 @@ a:hover {
     </td>
 <td>
 <!-- Retrieve Notifications  -->
-<form action="/social/ResponseRetrieveNotifications" method="post">
+<form action="/social/notificationController/ResponseRetrieveNotifications" method="post">
  
 <input type="hidden" name="myEmail" value ="${it.email}">
   <input type="submit" value="Retrieve Notifications">
@@ -252,8 +249,34 @@ a:hover {
   </form>
 
 </td>
-    </tr> 
+   
      
+
+
+
+
+<td>
+     <!-- view TimeLine -->
+ <form action="/social/userTimeLine/ResponseLoadTimeLine" method="post">
+<input type="hidden" name="myEmail" value ="${it.email}">
+  <input type="submit" value="TimeLine">
+
+  </form>
+
+</td>
+
+<td>
+     <!-- Pages -->
+ <form action="/social/pageController/ResponsePages" method="post">
+  <input type="submit" value="Pages">
+
+  </form>
+
+</td>
+
+    </tr> 
+
+
 
 </table>
 

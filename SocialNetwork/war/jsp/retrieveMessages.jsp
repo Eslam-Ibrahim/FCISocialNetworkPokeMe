@@ -13,6 +13,13 @@ th {
     background-color: green;
     color: white;
 }
+textarea 
+{
+  color: black;
+  opacity: 0.7; 
+  filter:alpha(opacity=70); 
+    
+}
 </style>
 </head>
 
@@ -47,7 +54,11 @@ function formSubmitter(formTag, messageTag){
 
 <form action="/social/ResponseSendMessage" method="post">
  
-Message : <input type="text" name="messageContents" /> <br>
+Message :
+<br>
+<textarea rows="4" cols="50" name="messageContents">
+Type Something!</textarea>
+<br>
 <input type="hidden" name="recieverMail" value ="${it.friendMail}">
 <input type="hidden" name="senderMail" value ="${it.email}">
 <input type="submit" value="Send Message" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>

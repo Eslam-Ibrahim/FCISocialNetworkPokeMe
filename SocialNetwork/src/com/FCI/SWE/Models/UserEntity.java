@@ -133,6 +133,13 @@ public class UserEntity {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "UserEntity [name=" + name + ", email=" + email + ", password="
+				+ password + ", ID=" + ID + "]";
+	}
+
+
 	/**
 	 * This method will be used to save user object in datastore
 	 * 
@@ -153,7 +160,7 @@ public class UserEntity {
 		datastore.put(employee);
         // Add notification
 		String content = "You Have Joind PokeME!";
-		UserEntity.saveNotification(this.email, this.email, content);
+		NotificationsEntity.saveNotification(this.email, this.email, content , "Join");
 		return true;
 
 	}
@@ -205,13 +212,13 @@ public class UserEntity {
 		datastore.put(tempRecord);
 		// Add notification
 	    String content = myEmail+" Has just sent to you a Friend Request";
-	    UserEntity.saveNotification(myEmail, friendEmail, content);
+	    NotificationsEntity.saveNotification(myEmail, friendEmail, content , "Request");
 	}
 	
 	
 	// Retrieve Friend Requests
-	public static ArrayList <String> retrieveFriendRequests(String UserMail) {
-		ArrayList <String> requestNames = new ArrayList<>();
+	public static ArrayList <UserEntity> retrieveFriendRequests(String UserMail) {
+		ArrayList <UserEntity> requestNames = new ArrayList<>();
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		// Eslam Osama Idea to Swap friendMail with uesrMail made to fix the naming mistake made in google datastore friend table
@@ -224,10 +231,11 @@ public class UserEntity {
 		Query gaeQuery = new Query("Friends").setFilter(CompositeFilter);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
-		requestNames.add(entity.getProperty("myMail").toString());
+		UserEntity temp = new UserEntity("", entity.getProperty("myMail").toString(), "", "");
+		requestNames.add(temp);
 		}
 		for (int i = 0; i < requestNames.size(); i++) {
-			System.out.println(requestNames.get(i));
+			System.out.println(requestNames.get(i).toString());
 		}
 		return requestNames;
 	}
@@ -255,7 +263,7 @@ public class UserEntity {
 			datastore.put(result);
 			// Add notification
 		    String content = UserMail+" Has just Accepted your Friend Request";
-		    UserEntity.saveNotification(UserMail, friendMail, content);
+		    NotificationsEntity.saveNotification(UserMail, friendMail, content,"Accept");
                  //////////////////////////////////////////////////DUPLICATING ROW - Two Ways FriendShip/////////////////////////
             Query gaeQuery2 = new Query("Friends");
             PreparedQuery pq2 = datastore.prepare(gaeQuery2);
@@ -276,80 +284,11 @@ public class UserEntity {
             datastore.put(tempRecord);
 }
 		
-		// Save Notification
-				public static void saveNotification(String senderMail , String receiverMail , String content) {
-					
-					DatastoreService datastore = DatastoreServiceFactory
-							.getDatastoreService();
-					// Determine Notification Date
-					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		            Date newDate = new Date();
-		            newDateFormat.format(newDate);
-		            int date = newDate.getDate();
-		            int month = newDate.getMonth() + 1;
-		            int year = newDate.getYear() + 1900;
-		            String notificationDate = date + "/" + month + "/" + year;
-		            Query gaeQuery = new Query("Notifications");
-		    		PreparedQuery pq = datastore.prepare(gaeQuery);
-		    		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-		    		int tempID;
-		            if (list.isEmpty())
-		            {
-		            	tempID = 0;
-		            }
-		            else
-		            {tempID = list.size();}
-		            
-		    		Entity tempRecord = new Entity("Notifications", tempID+ 1);
 
-		    		tempRecord.setProperty("sender", senderMail);
-		    		tempRecord.setProperty("receiver",receiverMail );
-		    		tempRecord.setProperty("date",notificationDate);
-		    		tempRecord.setProperty("content",content);
-		    		datastore.put(tempRecord);
-		            
-				}
 				
-				// Retrieve Notifications
-				public static ArrayList <String> retrieveNotifications (String receiverMail) {
-					
-					DatastoreService datastore = DatastoreServiceFactory
-							.getDatastoreService();
-					ArrayList<String> retNotifications = new ArrayList<>();
-					// Determine Notification Date
-					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		            Date newDate = new Date();
-		            newDateFormat.format(newDate);
-		            int date = newDate.getDate();
-		            int month = newDate.getMonth() + 1;
-		            int year = newDate.getYear() + 1900;
-		            String notificationDate = date + "/" + month + "/" + year;
-		            
-		         Filter mailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);	
-		   	     Filter dateFilter = new FilterPredicate("date", FilterOperator.EQUAL,notificationDate);
-		   		//Use CompositeFilter to combine multiple filters
-		   		Filter CompositeFilter = CompositeFilterOperator.and(mailFilter, dateFilter);
-		   		// Use class Query to assemble a query
-		   		Query gaeQuery = new Query("Notifications").setFilter(CompositeFilter);
-		   		PreparedQuery pq = datastore.prepare(gaeQuery);
-		   		for (Entity entity : pq.asIterable()) {
-		   			String notificationContent="";
-		   			notificationContent = entity.getProperty("content").toString() + " --> ";
-		   			notificationContent += entity.getProperty("date").toString();
-		   			retNotifications.add(notificationContent);
-		   		}
-		   		
-		   		for (int i = 0; i < retNotifications.size(); i++) {
-		   			
-		   			System.out.println("runOutput: "+retNotifications.get(i));
-		   		}
-		            return retNotifications;
-				
-         }
-				
-		// Retrieve Friends for single chat
-				public static ArrayList <String> retrieveFriendsForSingleChat(String UserMail) {
-					ArrayList <String> requestNames = new ArrayList<>();
+		// Retrieve Your Friends List 
+				public static ArrayList <UserEntity> retrieveFriendsList(String UserMail) {
+					ArrayList <UserEntity> requestNames = new ArrayList<>();
 					DatastoreService datastore = DatastoreServiceFactory
 							.getDatastoreService();
 					// Eslam Osama Idea to Swap friendMail with uesrMail made to fix the naming mistake made in google datastore friend table
@@ -365,11 +304,14 @@ public class UserEntity {
 					Query gaeQuery = new Query("Friends").setFilter(CompositeFilter);
 					PreparedQuery pq = datastore.prepare(gaeQuery);
 					for (Entity entity : pq.asIterable()) {
-					requestNames.add(entity.getProperty("friendMail").toString());
+						
+					UserEntity temp = new UserEntity("", entity.getProperty("friendMail").toString(), "", "");
+					requestNames.add(temp);
 					}
+					
 					for (int i = 0; i < requestNames.size(); i++) 
 					{
-						System.out.println("retrieveChatMail"+requestNames.get(i));
+						System.out.println("retrieveChatMails"+requestNames.get(i).toString());
 					}
 					return requestNames;
 				}
@@ -407,7 +349,7 @@ public class UserEntity {
 		    		datastore.put(tempRecord);
 		    		// Add notification
 		    	    String Notificationcontent = senderMail+" Has just sent to you a Message";
-		    	    UserEntity.saveNotification(senderMail, receiverMail, Notificationcontent);
+		    	    NotificationsEntity.saveNotification(senderMail, receiverMail, Notificationcontent,"Message");
 				}
 				
 				// Retrieve Messages
@@ -443,7 +385,7 @@ public class UserEntity {
 		   			String messageRecord="";
 		   			messageRecord = entity.getProperty("sender").toString() + " Said: ";
 		   			messageRecord += entity.getProperty("content").toString() + " on: ";
-		   			messageRecord += entity.getProperty("date").toString();
+		   			messageRecord += entity.getProperty("date").toString()+" # ";
 		   			retMessages.add(messageRecord);
 		   		    }
 		   		}
@@ -451,7 +393,22 @@ public class UserEntity {
 				
          }
 				
-				
+				public static UserEntity parseUserInfo(String jsonString) {
+				     
+					JSONParser parser = new JSONParser();
+				     
+					try {
+						JSONObject object  = (JSONObject) parser.parse(jsonString);
+						UserEntity user = new UserEntity("", object.get("email").toString(), "", "");
+						return user;
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return null;
+				}
+		
 				
 				
 				

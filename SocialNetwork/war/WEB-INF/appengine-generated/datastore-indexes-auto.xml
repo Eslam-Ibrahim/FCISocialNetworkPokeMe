@@ -1,4 +1,17 @@
-<!-- Indices written at Sat, 4 Apr 2015 14:45:53 EET -->
+<!-- Indices written at Mon, 13 Apr 2015 15:08:20 EET -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="UserPosts" ancestor="false" source="auto">
+        <property name="postLocation" direction="asc"/>
+        <property name="postOwner" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Friends" ancestor="false" source="auto">
+        <property name="friendMail" direction="asc"/>
+        <property name="Status" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

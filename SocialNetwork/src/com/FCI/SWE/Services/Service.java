@@ -25,10 +25,12 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.json.simple.JSONArray;
 
 import com.FCI.SWE.Controller.UserController;
 import com.FCI.SWE.Models.UserEntity;
-import com.google.appengine.labs.repackaged.org.json.JSONArray;
+//import com.google.appengine.labs.repackaged.org.json.JSONArray;
+
 
 /**
  * This class contains REST services, also contains action function for web
@@ -135,24 +137,19 @@ public class Service {
 	@POST
 	@Path("/retrieveFriendRequests")
 	public String retrieveFriendRequests(@FormParam("myEmail") String myEmail) {
-		JSONObject object = new JSONObject();
-	
-		object.put("Email", UserEntity.retrieveFriendRequests(myEmail));
-		System.out.println(object.toString());
-		return object.toString();
-	
+		ArrayList<UserEntity> retUsers = new ArrayList<>();
+		JSONArray retArry = new JSONArray();
+		retUsers =  UserEntity.retrieveFriendRequests(myEmail);
+		for (UserEntity user : retUsers)
+		{
+			JSONObject object = new JSONObject();
+			object.put("email", user.getEmail());
+		    retArry.add(object);
+		}
+		return retArry.toJSONString();
 
 }
 	
-	@POST
-	@Path("/retrieveNotifications")
-	public String retrieveNotifications(@FormParam("myEmail") String receiverMail) {
-		JSONObject object = new JSONObject();
-	
-		object.put("Notification", UserEntity.retrieveNotifications(receiverMail));
-		System.out.println(object.toString());
-		return object.toString();
-}
 	@POST
 	@Path("/sendMessage")
 	public String sendMessage(@FormParam("senderMail") String senderMail , @FormParam("recieverMail") String receiverMail 
@@ -167,10 +164,16 @@ public class Service {
 	@POST
 	@Path("/retrieveFriendsRetrieveMessages")
 	public String retrieveFriendsRetrieveMessages(@FormParam("myEmail") String myEmail) {
-		JSONObject object = new JSONObject();
-		object.put("Email", UserEntity.retrieveFriendsForSingleChat(myEmail));
-		System.out.println(object.toString());
-		return object.toString();
+		ArrayList<UserEntity> retUsers = new ArrayList<>();
+		JSONArray retArry = new JSONArray();
+		retUsers =  UserEntity.retrieveFriendsList(myEmail);
+		for (UserEntity user : retUsers)
+		{
+			JSONObject object = new JSONObject();
+			object.put("email", user.getEmail());
+		    retArry.add(object);
+		}
+		return retArry.toJSONString();
 	
 
 	}
