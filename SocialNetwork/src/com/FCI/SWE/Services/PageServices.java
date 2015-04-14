@@ -25,12 +25,14 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.json.simple.JSONArray;
 
 import com.FCI.SWE.Controller.UserController;
+import com.FCI.SWE.Models.NotificationsEntity;
 import com.FCI.SWE.Models.PageEntity;
 import com.FCI.SWE.Models.UserEntity;
 import com.FCI.SWE.Models.UserTimeline;
-import com.google.appengine.labs.repackaged.org.json.JSONArray;
+
 
 
 
@@ -63,25 +65,49 @@ public class PageServices {
 	@POST
 	@Path("/listPagesForOwner")
 	public String listPagesForOwner(@FormParam("myEmail") String pageOwner) {
-		JSONObject object = new JSONObject();
+		ArrayList<PageEntity> retPages = new ArrayList<>();
+		JSONArray retArry = new JSONArray();
+		retPages =  myPage.listPagesForOwner(pageOwner);
+		for (PageEntity page : retPages)
+		{
+			JSONObject object = new JSONObject();
+			object.put("pageOwner", page.getPageOwner());
+			object.put("pageName", page.getPageName());
+			object.put("type", page.getType());
+			object.put("category", page.getCategory());
+			object.put("numberOfLikes", page.getNumberOfLikes());
+			object.put("pageID", page.getPageID());
+			object.put("numberOfActiveUsers", page.getNumberOfActiveUsers());
+			
+			 
+		    retArry.add(object);
+		}
 	
-		object.put("pageNames", myPage.listPagesForOwner(pageOwner));
-		System.out.println(object.toString());
-		
-		return object.toString();
-	
+		return retArry.toJSONString();	
 
 }
 
 	@POST
 	@Path("/searchPage")
 	public String searchForPagebyTypeAndCategory(@FormParam("myEmail") String userMail , @FormParam("type") String type
-			,@FormParam("category") String category) {
-		JSONObject object = new JSONObject();
+			,@FormParam("category") String category) {	
+		ArrayList<PageEntity> retPages = new ArrayList<>();
+		JSONArray retArry = new JSONArray();
+		retPages =  myPage.searchForPagebyTypeAndCategory(userMail, type, category);
+		for (PageEntity page : retPages)
+		{
+			JSONObject object = new JSONObject();
+			object.put("pageOwner", page.getPageOwner());
+			object.put("pageName", page.getPageName());
+			object.put("type", page.getType());
+			object.put("category", page.getCategory());
+			object.put("numberOfLikes", page.getNumberOfLikes());
+			object.put("pageID", page.getPageID());
+			object.put("numberOfActiveUsers", page.getNumberOfActiveUsers());
+		    retArry.add(object);
+		}
 	
-		object.put("SearchPageNames", myPage.searchForPagebyTypeAndCategory(userMail, type, category));
-		System.out.println(object.toString());
-		return object.toString();
+		return retArry.toJSONString();	
 }
 	
 	

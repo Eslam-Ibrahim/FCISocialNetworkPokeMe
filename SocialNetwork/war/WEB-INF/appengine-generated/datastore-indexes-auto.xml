@@ -1,17 +1,18 @@
-<!-- Indices written at Mon, 13 Apr 2015 15:08:20 EET -->
+<!-- Indices written at Tue, 14 Apr 2015 22:52:23 EET -->
 
 <datastore-indexes>
 
-    <!-- Used 4 times in query history -->
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Pages" ancestor="false" source="auto">
+        <property name="category" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="pageOwner" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
     <datastore-index kind="UserPosts" ancestor="false" source="auto">
         <property name="postLocation" direction="asc"/>
         <property name="postOwner" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Friends" ancestor="false" source="auto">
-        <property name="friendMail" direction="asc"/>
-        <property name="Status" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

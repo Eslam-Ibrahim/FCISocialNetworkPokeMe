@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,6 +33,10 @@ function formSubmitter(formTag, messageTag){
 }
 
 </script>
+
+
+
+<h1>Pages</h1>
 <table>
 <tr>
 <td>
@@ -89,22 +95,26 @@ function formSubmitter(formTag, messageTag){
 <table>
   <tr>
     <th>Own Pages List </th>
-  </tr>
-  <tr>
-    <td>
-    ${it.pageNames}
-    <br>
-    <form action="/social/pageController/ResponseAccessPageOnwer" method="post">
- Page Name : <input type="text" name="pageName"/>
- <br>
-<input type="hidden" name="myEmail" value ="${it.myEmail}">
-<input type="submit" value="Access Page">
-</form>
-     
-    </td>
-    
+     <th>Action</th>
   </tr>
   
+    <c:forEach items = "${it.pagesForOwner}" var="pageObject">
+    <tr>
+    <td> 
+     <c:out value = "${pageObject.pageName}"></c:out>
+     </td>
+  <td>
+	<form action="/social/pageController/ResponseAccessPageOnwer" method="post">
+ <c:forEach items = "${it.mail}" var="user">
+<input type="hidden" name="myEmail" value ="${user.pageOwner}">
+<input type="hidden" name="pageID" value ="${pageObject.pageID}">
+</c:forEach>
+<input type="submit" value="Access Page">
+</form>
+   </td>
+   </tr>
+    </c:forEach>
+    
 </table>
     <br>
     <br>
@@ -117,8 +127,6 @@ function formSubmitter(formTag, messageTag){
     <br>
     <br>
 </td>
-<br>
-    <br>
 <td>
 <table>
   <tr>
@@ -153,24 +161,29 @@ function formSubmitter(formTag, messageTag){
   <option value="Musician/Band">Artist/Band-Musician/Band</option>
 </select>
  <br>
-<input type="hidden" name="myEmail" value ="${it.myEmail}">
-<input type="hidden" name="pageNames" value ="${it.pageNames}">
+  <c:forEach items = "${it.mail}" var="user">
+<input type="hidden" name="myEmail" value ="${user.pageOwner}">
+</c:forEach>
+<%-- <input type="hidden" name="pagesForOwner" value ="${it.pagesForOwner}"> --%>
 <input type="submit" value="Search Page">
 </form>
 <br>
-${it.SearchPageNames}
-<br>
-    <form action="/social/pageController/ResponseAccessPageUser" method="post">
- Page Name : <input type="text" name="pageName"/>
- <br>
-<input type="hidden" name="myEmail" value ="${it.myEmail}">
+  <c:forEach items = "${it.searchPages}" var="pageObject">
+    <tr>
+    <td> 
+     <c:out value = "${pageObject.pageName}"></c:out>
+     </td>
+  <td>
+   
+	<form action="/social/pageController/ResponseAccessPageUser" method="post">
+<input type="hidden" name="pageID" value ="${pageObject.pageID}">
 <input type="submit" value="Access Page">
 </form>
-     
-    </td>
-    
+   </td>
   </tr>
-  
+    </c:forEach>      
+    </td>
+  </tr>
 </table>
 </td>
 <td>

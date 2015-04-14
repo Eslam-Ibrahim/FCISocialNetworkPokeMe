@@ -268,6 +268,7 @@ a:hover {
 <td>
      <!-- Pages -->
  <form action="/social/pageController/ResponsePages" method="post">
+ <input type="hidden" name="myEmail" value ="${it.email}">
   <input type="submit" value="Pages">
 
   </form>
