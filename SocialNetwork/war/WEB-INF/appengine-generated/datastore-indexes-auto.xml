@@ -1,13 +1,6 @@
-<!-- Indices written at Tue, 14 Apr 2015 22:52:23 EET -->
+<!-- Indices written at Wed, 15 Apr 2015 21:40:08 EET -->
 
 <datastore-indexes>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Pages" ancestor="false" source="auto">
-        <property name="category" direction="asc"/>
-        <property name="type" direction="asc"/>
-        <property name="pageOwner" direction="asc"/>
-    </datastore-index>
 
     <!-- Used 2 times in query history -->
     <datastore-index kind="UserPosts" ancestor="false" source="auto">

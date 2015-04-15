@@ -104,11 +104,10 @@ function formSubmitter(formTag, messageTag){
      <c:out value = "${pageObject.pageName}"></c:out>
      </td>
   <td>
-	<form action="/social/pageController/ResponseAccessPageOnwer" method="post">
- <c:forEach items = "${it.mail}" var="user">
-<input type="hidden" name="myEmail" value ="${user.pageOwner}">
+<form action="/social/pageTimeLineController/ResponseLoadPageTimeLine" method="post">
+<input type="hidden" name="pageOwner" value ="${pageObject.pageOwner}">
 <input type="hidden" name="pageID" value ="${pageObject.pageID}">
-</c:forEach>
+<input type="hidden" name="pageName" value ="${pageObject.pageName}">
 <input type="submit" value="Access Page">
 </form>
    </td>
@@ -175,8 +174,10 @@ function formSubmitter(formTag, messageTag){
      </td>
   <td>
    
-	<form action="/social/pageController/ResponseAccessPageUser" method="post">
+	<form action="/social/pageTimeLineController/ResponseLoadPageTimeLineForUser" method="post">
 <input type="hidden" name="pageID" value ="${pageObject.pageID}">
+<input type="hidden" name="pageOwner" value ="${pageObject.pageOwner}">
+<input type="hidden" name="pageName" value ="${pageObject.pageName}">
 <input type="submit" value="Access Page">
 </form>
    </td>

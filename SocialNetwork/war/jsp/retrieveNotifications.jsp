@@ -77,6 +77,14 @@ function formSubmitter(formTag, messageTag){
   				<input type="submit" value="Show TimeLine">
   			</form>
 	    </c:when>
+	    
+	    <c:when test="${notificationObject.type == 'PagePost'}">
+	           <!-- view Pages -->
+ 			<form action="/social/pageController/ResponsePages" method="post">
+				<input type="hidden" name="myEmail" value ="${notificationObject.recieverMail}">
+  				<input type="submit" value="Show Pages">
+  			</form>
+	    </c:when>
 	    <c:otherwise>
 	        No Action Needed !
 	    </c:otherwise>
