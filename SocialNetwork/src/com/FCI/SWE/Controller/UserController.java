@@ -619,7 +619,77 @@ public class UserController {
 
 		}
 
-	    
+
+	    //retrieve friends to access their timeline
+	    @POST
+		@Path("/ResponseViewFriends")
+		@Produces("text/html")
+		public Response ResponseViewFriends(@FormParam("myEmail") String myEmail) {
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsRetrieveMessages";
+			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsRetrieveMessages";
+			try {
+				URL url = new URL(serviceUrl);
+				String urlParameters ="myEmail=" + myEmail;
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setDoInput(true);
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestMethod("POST");
+				connection.setConnectTimeout(60000);  //60 Seconds
+				connection.setReadTimeout(60000);  //60 Seconds
+				
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStreamWriter writer = new OutputStreamWriter(
+						connection.getOutputStream());
+				writer.write(urlParameters);
+				writer.flush();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String line ,retjson= "";
+				Map<String, ArrayList<UserEntity>> map = new HashMap<String, ArrayList<UserEntity>>();
+				while ((line = reader.readLine()) != null) {
+					retjson+=line;
+				}
+				writer.close();
+				reader.close();
+				JSONParser parser = new JSONParser();
+				JSONArray retArr = (JSONArray) parser.parse(retjson);
+				ArrayList<UserEntity> retNames = new ArrayList<>();
+				for (int i = 0; i < retArr.size(); ++i) {
+					JSONObject object  = (JSONObject) retArr.get(i);
+					retNames.add(UserEntity.parseUserInfo(object.toJSONString()));
+				}
+				// Dummy Post to save current user mail ---> Eslam Osama's Idea
+				ArrayList<UserEntity> userMail = new ArrayList<>();
+				UserEntity retMail = new UserEntity("", UserController.userMail, "", "");
+			    userMail.add(retMail);
+			    map.put("mails",retNames);
+			    map.put("mail", userMail);
+
+			 	
+
+			    if (map.isEmpty()) 
+				{return Response.ok(new Viewable("/jsp/Friends")).build();}
+
+				return Response.ok(new Viewable("/jsp/Friends",map)).build();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}  catch (ParseException e){
+			e.printStackTrace();
+		}
+
+			return null;
+
+		}
+		
+
 	
 
 }
