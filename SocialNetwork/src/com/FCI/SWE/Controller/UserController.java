@@ -484,8 +484,8 @@ public class UserController {
 		@Path("/ResponseRetrieveMessage")
 		@Produces("text/html")
 		public Response ResponseRetrieveMessage(@FormParam("myEmail") String myEmail) {
-	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsRetrieveMessages";
-			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsRetrieveMessages";
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriends";
+			String serviceUrl = "http://localhost:8888/rest/retrieveFriends";
 			try {
 				URL url = new URL(serviceUrl);
 				String urlParameters ="myEmail=" + myEmail;
@@ -521,7 +521,7 @@ public class UserController {
 					JSONObject object  = (JSONObject) retArr.get(i);
 					retNames.add(UserEntity.parseUserInfo(object.toJSONString()));
 				}
-				// Dummy Post to save current user mail ---> Eslam Osama's Idea
+				// Dummy User to save current user mail ---> Eslam Osama's Idea
 				ArrayList<UserEntity> userMail = new ArrayList<>();
 				UserEntity retMail = new UserEntity("", UserController.userMail, "", "");
 			    userMail.add(retMail);
@@ -620,13 +620,13 @@ public class UserController {
 		}
 
 
-	    //retrieve friends to access their timeline
+	    //retrieve friends to access their timeLine
 	    @POST
 		@Path("/ResponseViewFriends")
 		@Produces("text/html")
 		public Response ResponseViewFriends(@FormParam("myEmail") String myEmail) {
-	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriendsRetrieveMessages";
-			String serviceUrl = "http://localhost:8888/rest/retrieveFriendsRetrieveMessages";
+	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriends";
+			String serviceUrl = "http://localhost:8888/rest/retrieveFriends";
 			try {
 				URL url = new URL(serviceUrl);
 				String urlParameters ="myEmail=" + myEmail;
@@ -662,7 +662,7 @@ public class UserController {
 					JSONObject object  = (JSONObject) retArr.get(i);
 					retNames.add(UserEntity.parseUserInfo(object.toJSONString()));
 				}
-				// Dummy Post to save current user mail ---> Eslam Osama's Idea
+				// Dummy User to save current user mail ---> Eslam Osama's Idea
 				ArrayList<UserEntity> userMail = new ArrayList<>();
 				UserEntity retMail = new UserEntity("", UserController.userMail, "", "");
 			    userMail.add(retMail);

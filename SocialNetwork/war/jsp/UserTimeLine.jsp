@@ -45,7 +45,7 @@ function formSubmitterLike(formTag, messageTag){
 
 </script>
 
-<h1>Welcome To Your TimeLine</h1>
+<h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.postLocation}"></c:out> </c:forEach> TimeLine</h1>
 <br> 
 <br>
 <table>
@@ -122,7 +122,7 @@ Privacy :
 <input type="radio" name="privacy" value="private">private<br>
 <c:forEach items = "${it.mail}" var="user">
 <input type="hidden" name="myEmail" value ="${user.postOwner}">
-<input type="hidden" name="postLocation" value ="${user.postOwner}">
+<input type="hidden" name="postLocation" value ="${user.postLocation}">
 </c:forEach>
 <input type="submit" value="Post" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
 
@@ -137,7 +137,8 @@ Privacy :
 <br>
 <form action="/social/userTimeLine/ResponseLoadTimeLine" method="post">
 <c:forEach items = "${it.mail}" var="user">
-<input type="hidden" name="myEmail" value ="${user.postOwner}">
+<input type="hidden" name="visitingLocation" value = "${user.postLocation}">
+<input type="hidden" name="visitorMail" value = "${user.postOwner}">
 </c:forEach>
 <input type="submit" value="Refresh">
 </form>

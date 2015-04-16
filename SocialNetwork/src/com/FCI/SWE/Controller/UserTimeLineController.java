@@ -40,13 +40,15 @@ public class UserTimeLineController {
 	@POST
 	@Path("/ResponseLoadTimeLine")
 	@Produces("text/html")
-	public Response responseLoadTimeLine(@FormParam("myEmail") String myEmail) {
+	public Response responseLoadTimeLine(@FormParam("visitingLocation") String visitingLocation,
+			@FormParam("visitorMail") String visitorMail
+			) {
 		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveUserPosts";
 		String serviceUrl = "http://localhost:8888/rest/retrieveUserPosts";
 		
 		try {
 			URL url = new URL(serviceUrl);
-			String urlParameters ="myEmail=" + myEmail;
+			String urlParameters ="visitingLocation=" + visitingLocation;
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
@@ -80,10 +82,11 @@ public class UserTimeLineController {
 				retPosts.add(UserPost.parsePostInfo(object.toJSONString()));
 				
 			}
-			// Dummy Post to save current user mail ---> Eslam Osama's Idea
+			// Dummy Post to save TimeLine viewer mail & Visiting Location---> Eslam Osama's Idea
 			ArrayList<UserPost> userMail = new ArrayList<>();
 		    UserPost retMail = new UserPost();
-		    retMail.setPostOwner(UserController.userMail);
+		    retMail.setPostOwner(visitorMail);
+		    retMail.setPostLocation(visitingLocation);
 		    userMail.add(retMail);
 		    map.put("posts",retPosts);
 		    map.put("mail", userMail);

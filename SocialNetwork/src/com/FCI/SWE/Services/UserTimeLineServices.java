@@ -46,11 +46,11 @@ public class UserTimeLineServices {
 	
 	@POST
 	@Path("/retrieveUserPosts")
-	public String retrieveFriendRequests(@FormParam("myEmail") String myEmail) {
+	public String retrieveFriendRequests(@FormParam("visitingLocation") String visitingLocation) {
 		
 		ArrayList<UserPost> retPosts = new ArrayList<>();
 		JSONArray retArry = new JSONArray();
-		retPosts =  myTimeLine.loadPosts(myEmail);
+		retPosts =  myTimeLine.loadPosts(visitingLocation);
 		for (UserPost post : retPosts)
 		{
 			JSONObject object = new JSONObject();

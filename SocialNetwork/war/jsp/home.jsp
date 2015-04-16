@@ -258,9 +258,9 @@ a:hover {
 <td>
      <!-- view TimeLine -->
  <form action="/social/userTimeLine/ResponseLoadTimeLine" method="post">
-<input type="hidden" name="myEmail" value ="${it.email}">
+<input type="hidden" name="visitingLocation" value = "${it.email}">
+<input type="hidden" name="visitorMail" value = "${it.email}">
   <input type="submit" value="TimeLine">
-
   </form>
 
 </td>
@@ -274,7 +274,16 @@ a:hover {
   </form>
 
 </td>
+<!-- Friends -->
+<td>
 
+<form action="/social/ResponseViewFriends" method="post">
+ <input type="hidden" name="myEmail" value ="${it.email}">
+  <input type="submit" value="Friends">
+
+  </form>
+
+</td>
     </tr> 
 
 

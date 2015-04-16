@@ -221,7 +221,6 @@ public class PageEntity {
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
 			ArrayList<PageEntity> retPages = new ArrayList<>();
-			System.out.println("pageName: "+userMail);
 	         // You Are not  the owner of the page (Creator)
 	          Filter notOwnerMailFilter = new FilterPredicate("pageOwner", FilterOperator.NOT_EQUAL,userMail);	
 	          Filter typeFilter = new FilterPredicate("type", FilterOperator.EQUAL,type);	
@@ -283,5 +282,104 @@ public class PageEntity {
 			this.pageOwner = userMail;
 			
 		}
+		
+		
+		// User Like page
+		public static void likePage(long pageID , String likeOwner , String pageName , String pageOwner)
+		{
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+			// Step #0 : check if the user already likes this page
+	
+	          Filter likeOwnerFilter = new FilterPredicate("likeOwner", FilterOperator.EQUAL,likeOwner);	
+			// Use class Query to assemble a query
+			Query gaeQuery0 = new Query("PagesLike").setFilter(likeOwnerFilter);
+			PreparedQuery pq0 = datastore.prepare(gaeQuery0);
+			for (Entity entity : pq0.asIterable()) {
+	
+				    if (Long.parseLong(entity.getProperty("pageID").toString()) == pageID  )
+				    {
+				    	// Already liked this page before
+				    	return;
+				    }
+				}
+
+			// Step #1 : Add New Record in PagesLike Table
+	        Query gaeQuery = new Query("PagesLike");
+			PreparedQuery pq = datastore.prepare(gaeQuery);
+			List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+			long tempID;
+	        if (list.isEmpty())
+	        {
+	        	tempID = 0;
+	        }
+	        else
+	        {tempID = list.size();}
+	        
+			Entity tempRecord = new Entity("PagesLike", tempID+ 1);
+			tempRecord.setProperty("pageID",pageID);
+			tempRecord.setProperty("pageName",pageName);
+			tempRecord.setProperty("likeOwner",likeOwner);
+			tempRecord.setProperty("pageOwner",pageOwner);
+			datastore.put(tempRecord);	
+			
+		    // Step #2: Increase Like Counter in the liked page
+		    Filter pageIDFilter = new FilterPredicate("pageID", FilterOperator.EQUAL,pageID);
+		    Query gaeQuery2 = new Query("Pages").setFilter(pageIDFilter);
+			PreparedQuery pq2 = datastore.prepare(gaeQuery2);
+			Entity result = pq2.asSingleEntity();		
+			PageEntity pageRecord = new PageEntity(result.getProperty("pageOwner").toString(), result.getProperty("pageName").toString(),
+					result.getProperty("type").toString(), result.getProperty("category").toString(), 
+					Long.parseLong(result.getProperty("numberOflikes").toString())+1, 
+					Long.parseLong(result.getProperty("pageID").toString()), 
+					Long.parseLong(result.getProperty("numberOfActiveUsers").toString()));
+		//	System.out.println("likePage:"+pageRecord.toString());
+			result.setProperty("pageID",pageRecord.getPageID());
+			result.setProperty("pageOwner",pageRecord.getPageOwner());
+			result.setProperty("pageName",pageRecord.getPageName());
+			result.setProperty("type",pageRecord.getType());
+			result.setProperty("category",pageRecord.getCategory());
+			result.setProperty("numberOflikes",pageRecord.getNumberOfLikes());
+			result.setProperty("numberOfActiveUsers",pageRecord.getNumberOfActiveUsers());
+			datastore.put(result);
+			// Step #3 : Notify Page Owner
+		    String Notificationcontent = likeOwner+" Has just liked your page ' "+pageName+" '";
+		    NotificationsEntity.saveNotification(likeOwner, pageOwner, Notificationcontent,"PageLike");
+
+		}
+		
+		// View Liked pages list
+		
+		public static ArrayList<PageEntity> getLikedPages (String likeOwner)
+		{
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+			ArrayList<PageEntity> retPages = new ArrayList<>();
+			System.out.println("likeOwner: "+likeOwner);
+	        Filter likeOwnerFilter = new FilterPredicate("likeOwner", FilterOperator.EQUAL,likeOwner);	
+			// Use class Query to assemble a query
+			Query gaeQuery = new Query("PagesLike").setFilter(likeOwnerFilter);
+			PreparedQuery pq = datastore.prepare(gaeQuery);
+
+			for (Entity entity : pq.asIterable()) {
+				{
+					PageEntity pageRecord = new PageEntity(entity.getProperty("pageOwner").toString(), 
+							entity.getProperty("pageName").toString(),
+							entity.getProperty("likeOwner").toString(), 
+							"", 
+							0, 
+							Long.parseLong(entity.getProperty("pageID").toString()), 
+							0);
+					retPages.add(pageRecord);
+				    }
+				}
+
+			     for (int i = 0; i < retPages.size(); ++i) {
+					System.out.println(retPages.get(i).toString());
+				}
+				return retPages;
+	}
+			
+		
 
 }

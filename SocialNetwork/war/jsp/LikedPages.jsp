@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Friends</title>
+<title>Liked Pages</title>
 </head>
 <style>
 table, td, th {
@@ -25,27 +25,27 @@ color: #cf9118;
 <body>
 
 
-<h1>  Friends </h1>
+<h1>  Liked Pages </h1>
 <br>
 <table>
   <tr>
-    <th> Friends List</th>
+    <th> page List</th>
     <th> Action </th>
   </tr>
   
-    <c:forEach items = "${it.mails}" var="friend">
+    <c:forEach items = "${it.likedPages}" var="pageObject">
     <tr>
     <td> 
-     <c:out value = "${friend.email}"></c:out>
+     <c:out value = "${pageObject.pageName}"></c:out>
      </td>
   <td>
-    <c:forEach items = "${it.mail}" var="user">
-<form action="/social/userTimeLine/ResponseLoadTimeLine" method="post">
-<input type="hidden" name="visitingLocation" value = "${friend.email}">
-<input type="hidden" name="visitorMail" value ="${user.email}">
-  <input type="submit" value="Access TimeLine">
+    
+<form action="/social/pageTimeLineController/ResponseLoadPageTimeLine" method="post">
+<input type="hidden" name="pageOwner" value ="${pageObject.pageOwner}">
+<input type="hidden" name="pageID" value ="${pageObject.pageID}">
+<input type="hidden" name="pageName" value ="${pageObject.pageName}">
+  <input type="submit" value="Access Page TimeLine">
   </form>
-</c:forEach>
    </td>
   </tr>
     </c:forEach>

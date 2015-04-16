@@ -73,12 +73,21 @@ function formSubmitter(formTag, messageTag){
 	    <c:when test="${notificationObject.type == 'Post'}">
 	           <!-- view TimeLine -->
  			<form action="/social/userTimeLine/ResponseLoadTimeLine" method="post">
-				<input type="hidden" name="myEmail" value ="${notificationObject.recieverMail}">
+				<input type="hidden" name="visitingLocation" value = "${notificationObject.recieverMail}">
+				<input type="hidden" name="visitorMail" value = "${notificationObject.recieverMail}">
   				<input type="submit" value="Show TimeLine">
   			</form>
 	    </c:when>
 	    
 	    <c:when test="${notificationObject.type == 'PagePost'}">
+	           <!-- view Pages -->
+ 			<form action="/social/pageController/ResponsePages" method="post">
+				<input type="hidden" name="myEmail" value ="${notificationObject.recieverMail}">
+  				<input type="submit" value="Show Pages">
+  			</form>
+	    </c:when>
+	    
+	    <c:when test="${notificationObject.type == 'PageLike'}">
 	           <!-- view Pages -->
  			<form action="/social/pageController/ResponsePages" method="post">
 				<input type="hidden" name="myEmail" value ="${notificationObject.recieverMail}">

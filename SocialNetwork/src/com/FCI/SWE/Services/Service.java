@@ -162,8 +162,8 @@ public class Service {
 }
 
 	@POST
-	@Path("/retrieveFriendsRetrieveMessages")
-	public String retrieveFriendsRetrieveMessages(@FormParam("myEmail") String myEmail) {
+	@Path("/retrieveFriends")
+	public String retrieveFriends(@FormParam("myEmail") String myEmail) {
 		ArrayList<UserEntity> retUsers = new ArrayList<>();
 		JSONArray retArry = new JSONArray();
 		retUsers =  UserEntity.retrieveFriendsList(myEmail);

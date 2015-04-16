@@ -212,8 +212,15 @@ public class PageController {
 					}
 					// Get Created Pages Again to keep it available when building JSP Again
 					ArrayList<PageEntity> createdPages = getCreatedPagesByUser(userMail);
+					// Get Current Again to keep it available when building JSP Again
+					// Dummy Page to save current user mail ---> Eslam Osama's Idea
+					ArrayList<PageEntity> retUserMail = new ArrayList<>();
+				    PageEntity retMail = new PageEntity();
+				    retMail.setPageOwner(UserController.userMail);
+				    retUserMail.add(retMail);
 			        map.put("searchPages",rePages);
-			       map.put("pagesForOwner", createdPages);
+			        map.put("pagesForOwner", createdPages);
+			        map.put("mail", retUserMail);
 				  //  System.out.println(map.get("mails"));
 					if (map.isEmpty())
 						return Response.ok(new Viewable("/jsp/Pages",map)).build();				
@@ -275,6 +282,118 @@ public class PageController {
 		
 
 	}
+	
+
+	@POST
+	@Path("/ResponseLikePageForUser")
+	@Produces("text/html")
+	public void ResponseLikePageForUser(@FormParam("pageOwner")String pageOwner, @FormParam("pageName") String pageName , 
+			@FormParam("pageID")long pageID , 
+			@FormParam("likeOwner")String likeOwner ) {
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/likePageForUser";
+		String serviceUrl = "http://localhost:8888/rest/likePageForUser";
+		
+		try {
+			URL url = new URL(serviceUrl);
+			String urlParameters = "pageID=" + pageID + "&pageOwner=" + pageOwner +
+					"&pageName="+pageName+"&likeOwner="+likeOwner;
+					
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setConnectTimeout(60000);  //60 Seconds
+			connection.setReadTimeout(60000);  //60 Seconds
+			
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStreamWriter writer = new OutputStreamWriter(
+					connection.getOutputStream());
+			writer.write(urlParameters);
+			writer.flush();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			writer.close();
+			reader.close();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}  
+
+		
+
+	}
+	
+	@POST
+	@Path("/ResponseRetrieveLikedPages")
+	public Response ResponseRetrieveLikedPages(@FormParam("likeOwner") String likeOwner)
+	{
+
+		//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/RetrievelikedPages";
+				String serviceUrl = "http://localhost:8888/rest/RetrievelikedPages";
+				
+				try {
+					URL url = new URL(serviceUrl);
+					String urlParameters ="likeOwner=" + likeOwner;
+					HttpURLConnection connection = (HttpURLConnection) url
+							.openConnection();
+					connection.setDoOutput(true);
+					connection.setDoInput(true);
+					connection.setInstanceFollowRedirects(false);
+					connection.setRequestMethod("POST");
+					connection.setConnectTimeout(60000);  //60 Seconds
+					connection.setReadTimeout(60000);  //60 Seconds
+					
+					connection.setRequestProperty("Content-Type",
+							"application/x-www-form-urlencoded;charset=UTF-8");
+					OutputStreamWriter writer = new OutputStreamWriter(
+							connection.getOutputStream());
+					writer.write(urlParameters);
+					writer.flush();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(
+							connection.getInputStream()));
+
+					String line ,retjson= "";
+					Map<String, ArrayList<PageEntity>> map = new HashMap<String, ArrayList<PageEntity>>();
+					while ((line = reader.readLine()) != null) {
+						retjson+=line;
+					}
+					writer.close();
+					reader.close();
+					JSONParser parser = new JSONParser();
+					JSONArray retArr = (JSONArray) parser.parse(retjson);
+					ArrayList<PageEntity> rePages = new ArrayList<>();
+					for (int i = 0; i < retArr.size(); ++i) {
+						JSONObject object  = (JSONObject) retArr.get(i);
+						rePages.add(PageEntity.parsePageInfo(object.toJSONString()));
+						
+					}
+			        map.put("likedPages",rePages);
+			       
+				  //  System.out.println(map.get("mails"));
+					if (map.isEmpty())
+						return Response.ok(new Viewable("/jsp/LikedPages",map)).build();				
+					
+			
+					return Response.ok(new Viewable("/jsp/LikedPages",map)).build();				
+					} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			}  catch (ParseException e){
+				e.printStackTrace();
+			}
+				return null;
+	}	
+
+
 
 	
 

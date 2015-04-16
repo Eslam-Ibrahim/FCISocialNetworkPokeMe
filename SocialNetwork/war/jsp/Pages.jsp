@@ -76,7 +76,9 @@ function formSubmitter(formTag, messageTag){
   <option value="Musician/Band">Artist/Band-Musician/Band</option>
 </select>
  <br>
-<input type="hidden" name="myEmail" value ="${it.myEmail}">
+ <c:forEach items = "${it.mail}" var="user">
+<input type="hidden" name="myEmail" value ="${user.pageOwner}">
+</c:forEach>
 <input type="submit" value="Create Page" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
 
 </form>
@@ -187,6 +189,19 @@ function formSubmitter(formTag, messageTag){
   </tr>
 </table>
 </td>
+<td>
+<br>
+<!-- view Liked Pages  -->
+<form action="/social/pageController/ResponseRetrieveLikedPages" method="post">
+  <c:forEach items = "${it.mail}" var="user">
+<input type="hidden" name="likeOwner" value ="${user.pageOwner}">
+</c:forEach>
+  <input type="submit" value="View Liked Pages">
+  </form>
+  
+  <br>
+</td>
+
 <td>
 <br>
 <!-- Back Home  -->

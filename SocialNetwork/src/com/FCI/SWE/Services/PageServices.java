@@ -110,5 +110,41 @@ public class PageServices {
 		return retArry.toJSONString();	
 }
 	
+	@POST
+	@Path("/likePageForUser")
+	public String likePageForUser(@FormParam("pageOwner")String pageOwner, @FormParam("pageName") String pageName , 
+			@FormParam("pageID")long pageID , 
+			@FormParam("likeOwner")String likeOwner)
+			{
+		         JSONObject object = new JSONObject();	
+	             PageEntity.likePage(pageID, likeOwner, pageName, pageOwner);
+	             object.put("Status", "OK");
+	     		return object.toString();
+		
+            }
+
+
+	@POST
+	@Path("/RetrievelikedPages")
+	public String retrievelikedPages(@FormParam("likeOwner") String likeOwner) {	
+		ArrayList<PageEntity> retPages = new ArrayList<>();
+		JSONArray retArry = new JSONArray();
+		retPages = PageEntity.getLikedPages(likeOwner);
+		for (PageEntity page : retPages)
+		{
+			JSONObject object = new JSONObject();
+			object.put("pageOwner", page.getPageOwner());
+			object.put("pageName", page.getPageName());
+			object.put("type", page.getType());
+			object.put("category", page.getCategory());
+			object.put("numberOfLikes", page.getNumberOfLikes());
+			object.put("pageID", page.getPageID());
+			object.put("numberOfActiveUsers", page.getNumberOfActiveUsers());
+		    retArry.add(object);
+		}
+	
+		return retArry.toJSONString();	
+}
+
 	
 }
