@@ -218,7 +218,33 @@ public class PageTimeLineController {
 				e.printStackTrace();
 			}
 				return null;
-	}	
+	}
+	
+	
+	
+
+	@POST
+	@Path("/ResponseSharePost")
+	@Produces("text/html")
+	public Response responseSharePost(@FormParam("originalPostContent") String originalPostContent,
+			@FormParam("OriginalPostOwner") String OriginalPostOwner,
+			@FormParam("shareOwner") String shareOwner,
+			@FormParam("pageOwner")String pageOwner, @FormParam("pageName") String pageName,
+			@FormParam("pageID") long pageID) 
+	{
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("originalPostContent", originalPostContent);
+		map.put("OriginalPostOwner", OriginalPostOwner);
+		map.put("shareOwner", shareOwner);
+		map.put("pageOwner", pageOwner);
+		map.put("pageName", pageName);
+		map.put("pageID",  String.valueOf(pageID));
+		return Response.ok(new Viewable("/jsp/sharePagePost",map)).build();
+		
+			
+	}
+
 	
 
 

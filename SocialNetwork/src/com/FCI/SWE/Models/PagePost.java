@@ -146,7 +146,13 @@ public class PagePost {
         }
         else
         {tempID = (long)list.size();}
-        
+        // Check if the page posts to itself ---> Abd El-Rahman Mohamed'S Idea
+        ///////////////////////////////////////////////////////////////////////
+        if (pageOwner.equals(postOwner))
+        {
+        	postOwner = pageName;
+        }
+        //////////////////////////////////////////////////////////////////////
 		Entity tempRecord = new Entity("pagePosts", tempID+ 1);
 		long numberOflikes = 0;
 		tempRecord.setProperty("pageID",pageID);

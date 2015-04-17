@@ -154,6 +154,27 @@ public class UserTimeLineController {
 		
 
 	}
+	
+	
+	@POST
+	@Path("/ResponseSharePost")
+	@Produces("text/html")
+	public Response responseSharePost(@FormParam("originalPostContent") String originalPostContent,
+			@FormParam("OriginalPostOwner") String OriginalPostOwner,
+			@FormParam("shareOwner") String shareOwner,
+			@FormParam("visitingLocation") String visitingLocation) 
+	{
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("originalPostContent", originalPostContent);
+		map.put("OriginalPostOwner", OriginalPostOwner);
+		map.put("shareOwner", shareOwner);
+		map.put("visitingLocation", visitingLocation);
+		return Response.ok(new Viewable("/jsp/shareUserPost",map)).build();
+		
+			
+	}
+
 
 
 }

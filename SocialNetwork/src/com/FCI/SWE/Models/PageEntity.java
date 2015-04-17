@@ -289,8 +289,9 @@ public class PageEntity {
 		{
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
+			  // Handling Multiple Likes ---> Abd El-Rahman Mohamed'S Idea
+			///////////////////////////////////////////////////////////////////////////////////////
 			// Step #0 : check if the user already likes this page
-	
 	          Filter likeOwnerFilter = new FilterPredicate("likeOwner", FilterOperator.EQUAL,likeOwner);	
 			// Use class Query to assemble a query
 			Query gaeQuery0 = new Query("PagesLike").setFilter(likeOwnerFilter);
@@ -303,7 +304,7 @@ public class PageEntity {
 				    	return;
 				    }
 				}
-
+             ///////////////////////////////////////////////////////////////////////////////////////
 			// Step #1 : Add New Record in PagesLike Table
 	        Query gaeQuery = new Query("PagesLike");
 			PreparedQuery pq = datastore.prepare(gaeQuery);

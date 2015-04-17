@@ -38,11 +38,6 @@ function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "Posted Successfully";
   document.forms[formTag].submit();
 }
-function formSubmitterLike(formTag, messageTag){
-	  document.getElementById(messageTag).innerHTML = "Liked Successfully";
-	  document.forms[formTag].submit();
-	}
-
 </script>
 
 <h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.postLocation}"></c:out> </c:forEach> TimeLine</h1>
@@ -67,10 +62,12 @@ function formSubmitterLike(formTag, messageTag){
     Date :  <c:out value = "${post.date}"></c:out>
      <br>
     <c:forEach items = "${it.mail}" var="user">
-     <form action="/social/userTimeLine/ResponseLikePost" method="post">
-<input type="hidden" name="postID" value ="${post.postID}">
-<input type="hidden" name="likeOwner" value ="${user.postOwner}">
-<input type="submit" value="Like" onclick="formSubmitterLike('sampleform', 'message')"><div id='message'></div>
+     <form action="/social/userTimeLine/ResponseSharePost" method="post">
+<input type="hidden" name="originalPostContent" value ="${post.content}">
+<input type="hidden" name="OriginalPostOwner" value ="${post.postOwner}">
+<input type="hidden" name="shareOwner" value ="${user.postOwner}">
+<input type="hidden" name="visitingLocation" value = "${user.postLocation}">
+<input type="submit" value="Share Post">
 </form>
 </c:forEach>
    </td>

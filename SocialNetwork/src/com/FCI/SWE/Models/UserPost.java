@@ -213,7 +213,12 @@ public class UserPost {
 		tempRecord.setProperty("privacy",privacy);
 		datastore.put(tempRecord);
 		// Add notification
-	    String Notificationcontent = postOwner +" Has just posted at your timeline";
+		String userName = postOwner;
+		if (userName.equals(postLocation))
+		{
+			userName = "You";
+		}
+	    String Notificationcontent = userName +" Has just posted at your timeline";
 	    NotificationsEntity.saveNotification(postOwner, postLocation, Notificationcontent,"Post");
 	}
 
