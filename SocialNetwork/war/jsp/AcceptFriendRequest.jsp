@@ -1,47 +1,51 @@
 <%@ taglib prefix="c" 
            uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Accept Friend Request Page</title>
-</head>
-<style>
-table, td, th {
-    border: 1px solid gray;
-}
 
-th {
-    background-color: blue;
-    color: white;
-}
-h1
-{
-text-align:center;
-font-family:courier;
-color: #cf9118;
-}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Accept Friend Request Page</title>
+<style>
+     <%@ include file="style.css"%>
 </style>
-<body>
+</head>
+
+<body  bgcolor="#181819">
 
 <script language="JavaScript">
 function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "You Are Now Friends";
   document.forms[formTag].submit();
 }
-
 </script>
 
- 
-    
-<h1>Friend Requests</h1>
-<br> 
 
-<table>
+    <div id="container">
+        <br />
+        
+        <div id="header1">
+            <div id="textinsideheader1">
+              
+               <h1>Friend Requests</h1>
+            
+            
+            </div>
+
+        </div> <!--end of id=header1 -->
+        
+        <br /><br />
+
+        <div id="header2">  
+
+            <div id="text_inside_header2">
+			
+			<table>
   <tr>
-    <th> Friend Requests List</th>
+
+  <h3> <b> <font color="#ef4e01">Friend Requests List</font> </b> </h3>
   </tr>
-  
+<br><br>  
     <c:forEach items = "${it.requests}" var="sender">
     <tr>
     <td> 
@@ -67,7 +71,7 @@ function formSubmitter(formTag, messageTag){
 </c:forEach>
 <input type="submit" value="Refresh">
 </form>
-
+<br><br><br>
 <!-- Back Home  -->
 <form action="/social/backHome" method="get">
  
@@ -75,8 +79,27 @@ function formSubmitter(formTag, messageTag){
   </form>
   <br>
 
+			
+            </div> <!--end of text inside header 2 -->
+            
+        </div> <!--end of header2 -->
+
+        
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
 
 
+        <br />
+        <br />
+
+    </div> <!--end of container-->
+    <br />
+    <br />
 
 </body>
+
+
 </html>

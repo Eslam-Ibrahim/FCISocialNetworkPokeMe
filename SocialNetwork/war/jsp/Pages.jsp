@@ -5,59 +5,62 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Pages</title>
-</head>
+
 <style>
-table, td, th {
-    border: 1px solid gray;
-}
-
-th {
-    background-color: blue;
-    color: white;
-}
-h1
-{
-text-align:center;
-font-family:courier;
-color: #cf9118;
-}
-
+     <%@ include file="style.css"%>
 </style>
+</head>
 
-<body>
+<body bgcolor="#181819">
+
 <script language="JavaScript">
 function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "Page Created Successfully";
   document.forms[formTag].submit();
   
 }
-
 </script>
+<div id="container">
+    <br />
+    
+    <div id="header1">
+        <div id="textinsideheader1">
+          
+        <h1>Pages</h1>
+        
+        
+        </div>
 
+    </div> <!--end of id=header1 -->
+    
+    <br /><br />
 
+    <div id="header2">  
 
-<h1>Pages</h1>
-<table>
+        <div id="text_inside_header2">
+		
+		
+<table border="5">
 <tr>
 <td>
-<table>
-  <tr>
-    <th> Create Page</th>
+<table >
+  <tr bgcolor="black">
+    <th><b> <font color="#ef4e01"><h2>Create Page</h2></font> </b> </th>
   </tr>
   <tr>
     <td>
     <form action="/social/pageController/ResponseCreatePage" method="post">
- 
- Page Name : <input type="text" name="pageName"/>
+ <h3> <b> <font color="#ef4e01">Page Name : </font> </b> </h3>
+ <input type="text" name="pageName"/>
  <br>
- Page Type:
+ <h3> <b> <font color="#ef4e01">Page Type : </font> </b> </h3>
 <br>
 <input type="radio" name="type" value="Local Business">Local Business<br>
 <input type="radio" name="type" value="Organization">Organization<br>
 <input type="radio" name="type" value="Brand/Product">Brand/Product<br>
 <input type="radio" name="type" value="Artist/Band">Artist/Band<br>
  
- Page Category:
+ <h3> <b> <font color="#ef4e01">Page Category : </font> </b> </h3>
  <br>
  <select name="category">
   <option value="Bank">Local Business-Bank</option>
@@ -75,7 +78,7 @@ function formSubmitter(formTag, messageTag){
   <option value="Journalist">Artist/Band-Journalist</option>
   <option value="Musician/Band">Artist/Band-Musician/Band</option>
 </select>
- <br>
+ <br><br>
  <c:forEach items = "${it.mail}" var="user">
 <input type="hidden" name="myEmail" value ="${user.pageOwner}">
 </c:forEach>
@@ -88,16 +91,15 @@ function formSubmitter(formTag, messageTag){
   </tr>
   
 </table>
-<br>
- <br>
- <br>   
-    <br>
+
 </td>
 <td>
-<table>
-  <tr>
-    <th>Own Pages List </th>
-     <th>Action</th>
+
+<table border="5">
+  <tr bgcolor="black">
+    <th><b> <font color="#ef4e01"><h3> Own Pages List</h3></font> </b></th>
+    <th><b> <font color="#ef4e01"><h3>Action</h3></font> </b> </th>
+    
   </tr>
   
     <c:forEach items = "${it.pagesForOwner}" var="pageObject">
@@ -129,21 +131,21 @@ function formSubmitter(formTag, messageTag){
     <br>
 </td>
 <td>
-<table>
-  <tr>
-    <th>Search Pages </th>
+<table border="5">
+  <tr bgcolor="black">
+    <th><b> <font color="#ef4e01"><h2>Search Pages</h2></font> </b> </th>
   </tr>
   <tr>
     <td>
     <form action="/social/pageController/ResponseSearchPages" method="post">
- Page Type:
+ <h3> <b> <font color="#ef4e01">Page Type : </font> </b> </h3>
 <br>
 <input type="radio" name="type" value="Local Business">Local Business<br>
 <input type="radio" name="type" value="Organization">Organization<br>
 <input type="radio" name="type" value="Brand/Product">Brand/Product<br>
 <input type="radio" name="type" value="Artist/Band">Artist/Band<br>
  <br>
- Page Category:
+ <h3> <b> <font color="#ef4e01">Page Category : </font> </b> </h3>
  <br>
  <select name="category">
   <option value="Bank">Local Business-Bank</option>
@@ -161,7 +163,7 @@ function formSubmitter(formTag, messageTag){
   <option value="Journalist">Artist/Band-Journalist</option>
   <option value="Musician/Band">Artist/Band-Musician/Band</option>
 </select>
- <br>
+ <br><br>
   <c:forEach items = "${it.mail}" var="user">
 <input type="hidden" name="myEmail" value ="${user.pageOwner}">
 </c:forEach>
@@ -189,6 +191,12 @@ function formSubmitter(formTag, messageTag){
   </tr>
 </table>
 </td>
+</tr>
+</table>
+
+<br>
+
+<table border="5">
 <td>
 <br>
 <!-- view Liked Pages  -->
@@ -200,9 +208,10 @@ function formSubmitter(formTag, messageTag){
   </form>
   
   <br>
-</td>
 
+</td>
 <td>
+
 <br>
 <!-- Back Home  -->
 <form action="/social/backHome" method="get">
@@ -212,7 +221,25 @@ function formSubmitter(formTag, messageTag){
   
   <br>
 </td>
-</tr>
 </table>
+        </div> <!--end of text inside header 2 -->
+        
+    </div> <!--end of header2 -->
+
+    
+    <br /><br /><br /><br />
+    <br /><br /><br /><br />
+
+    <br /><br /><br /><br />
+    <br /><br /><br /><br />
+
+
+    <br />
+    <br />
+
+</div> <!--end of container-->
+<br />
+<br />
+
 </body>
 </html>

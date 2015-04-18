@@ -5,15 +5,58 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Insert title here</title>
+
+<style>
+     <%@ include file="style.css"%>
+</style>
+
 </head>
-<body>
 
-<!-- Send Request -->
-You Have Sent a Friend Request , please wait for Response 
+<body  bgcolor="#181819">
+    <div id="container">
+        <br />
+        
+        <div id="header1">
+            <div id="textinsideheader1">
+            
+            </div>
 
+        </div> <!--end of id=header1 -->
+        
+        <br /><br />
+
+        <div id="header2">  
+
+            <div id="text_inside_header2">
+			
+			<!-- Send Request -->
+
+<h3> <b> <font color="#ef4e01">You Have Sent a Friend Request , please wait for Response
+</font> </b> </h3> 
+<br><br>
 <a href="/social/backHome">Back to Home</a> <br>
 <br>
 
 
+            </div> <!--end of text inside header 2 -->
+            
+        </div> <!--end of header2 -->
+
+        
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+
+        <br />
+        <br />
+
+    </div> <!--end of container-->
+    <br />
+    <br />
+
 </body>
+
 </html>

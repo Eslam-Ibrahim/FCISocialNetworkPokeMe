@@ -4,32 +4,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Share User Post Page</title>
-</head>
-<style>
-table, td, th {
-    border: 1px solid gray;
-}
 
-th {
-    background-color: blue;
-    color: white;
-}
-h1
-{
-text-align:center;
-font-family:courier;
-color: #cf9118;
-}
-textarea 
-{
-  color: black;
-  opacity: 0.7; 
-  filter:alpha(opacity=70); 
-    
-}
+<style>
+     <%@ include file="style.css"%>
 </style>
 
-<body>
+</head>
+
+<body  bgcolor="#181819">
+
 <script language="JavaScript">
 
 function formSubmitter(formTag, messageTag){
@@ -38,9 +21,27 @@ function formSubmitter(formTag, messageTag){
 }
 </script>
 
-<h1>Share Post Page</h1>
-<br>
-<table>
+
+    <div id="container">
+        <br />
+        
+        <div id="header1">
+            <div id="textinsideheader1">
+              
+                <h1>Share User Post</h1>
+            
+            
+            </div>
+
+        </div> <!--end of id=header1 -->
+        
+        <br /><br />
+
+        <div id="header2">  
+
+            <div id="text_inside_header2">
+			
+			<table border="5">
   <tr>
     <th> Share Post</th>
   </tr>
@@ -53,7 +54,7 @@ ${it.OriginalPostOwner} :
 ${it.originalPostContent} - Shared
 </textarea>
  <br>
- Feelings:
+ <b> <font color="#ef4e01">Feelings</font> </b>
  <br>
  <select name="feelings">
   <option value="Happy">Happy</option>
@@ -68,11 +69,12 @@ ${it.originalPostContent} - Shared
   <option value="Lonely">Lonely</option>
   <option value="Angry">Angry</option>
 </select>
- <br>
-Privacy :
+ <br><br>
+<b> <font color="#ef4e01">Privacy</font> </b>
 <br>
 <input type="radio" name="privacy" value="public">public<br>
 <input type="radio" name="privacy" value="private">private<br>
+<br><br>
 <input type="hidden" name="myEmail" value ="${it.shareOwner}">
 <input type="hidden" name="postLocation" value ="${it.shareOwner}">
 <input type="submit" value="Share Post Now!" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
@@ -101,5 +103,27 @@ Privacy :
   
   <br>
 
+            </div> <!--end of text inside header 2 -->
+            
+        </div> <!--end of header2 -->
+
+        
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+
+        <br />
+        <br />
+
+    </div> <!--end of container-->
+    <br />
+    <br />
+
 </body>
+
+
+<br>
 </html>

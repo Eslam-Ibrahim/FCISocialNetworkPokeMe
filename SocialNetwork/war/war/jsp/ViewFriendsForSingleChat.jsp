@@ -4,14 +4,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Send Message Page</title>
-
-<style>
-     <%@ include file="style.css"%>
-</style>
-
 </head>
 
-<body  bgcolor="#181819">
+<body>
 <script language="JavaScript">
 function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "Message Sent";
@@ -20,30 +15,12 @@ function formSubmitter(formTag, messageTag){
 
 </script>
 
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-                <h1>Friends List</h1>
-            
-            
-            </div>
-
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
-
-        <div id="header2">  
-
-            <div id="text_inside_header2">
-			
-			
-
-
 <p> Friends List</p>
  ${it.mails}
+
+
+
+
 
 <br>
 <form action="/social/ResponseSendMessage" method="post">
@@ -61,24 +38,5 @@ Message : <input type="text" name="messageContents" /> <br>
   <input type="submit" value="Back To  HomePage">
   </form>
   <br>
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
-
 </body>
 </html>

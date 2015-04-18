@@ -5,29 +5,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Liked Pages</title>
-</head>
-<style>
-table, td, th {
-    border: 1px solid gray;
-}
 
-th {
-    background-color: blue;
-    color: white;
-}
-h1
-{
-text-align:center;
-font-family:courier;
-color: #cf9118;
-}
+<style>
+     <%@ include file="style.css"%>
 </style>
+
+</head>
+
 <body>
 
 
-<h1>  Liked Pages </h1>
-<br>
-<table>
+<body  bgcolor="#181819">
+    <div id="container">
+        <br />
+        
+        <div id="header1">
+            <div id="textinsideheader1">
+              
+              <h1>  Liked Pages </h1>
+            
+            </div>
+
+        </div> <!--end of id=header1 -->
+        
+        <br /><br />
+
+        <div id="header2">  
+
+            <div id="text_inside_header2">
+			
+			<table border="5">
   <tr>
     <th> page List</th>
     <th> Action </th>
@@ -66,5 +73,25 @@ color: #cf9118;
   <input type="submit" value="Back To  HomePage">
   </form>
   <br>
+            </div> <!--end of text inside header 2 -->
+            
+        </div> <!--end of header2 -->
+
+        
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+        <br /><br /><br /><br />
+        <br /><br /><br /><br />
+
+
+        <br />
+        <br />
+
+    </div> <!--end of container-->
+    <br />
+    <br />
+
 </body>
+
 </html>
