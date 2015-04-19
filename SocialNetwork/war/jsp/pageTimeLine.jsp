@@ -6,12 +6,30 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Page TimeLine</title>
-
-<style>
-     <%@ include file="style.css"%>
-</style>
-
 </head>
+<style>
+table, td, th {
+    border: 1px solid gray;
+}
+
+th {
+    background-color: blue;
+    color: white;
+}
+h1
+{
+text-align:center;
+font-family:courier;
+color: #cf9118;
+}
+textarea 
+{
+  color: black;
+  opacity: 0.7; 
+  filter:alpha(opacity=70); 
+    
+}
+</style>
 
 <body>
 <script language="JavaScript">
@@ -22,29 +40,12 @@ function formSubmitter(formTag, messageTag){
 }
 </script>
 
-<body  bgcolor="#181819">
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-               <h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.privacy}"> </c:out> </c:forEach>Page</h1>
-            
-            </div>
-
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
-
-        <div id="header2">  
-
-            <div id="text_inside_header2">
-			
-<table border="5">
+<h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.privacy}"> </c:out> </c:forEach>Page</h1>
+<br> 
+<br>
+<table>
   <tr>
-  
-     <th><b> <font color="#ef4e01">Posts</font> </b></th> 
+    <th> Posts</th>
   </tr>
   
     <c:forEach items = "${it.pagePosts}" var="post">
@@ -59,8 +60,7 @@ function formSubmitter(formTag, messageTag){
     Date :  <c:out value = "${post.date}"></c:out>
      <br>
     Number of Seen :  <c:out value = "${post.numberOfSeens}"></c:out>
-     <br><br>
-     
+     <br>
     <c:forEach items = "${it.mail}" var="user">
      <form action="/social/pageTimeLineController/ResponseSharePost" method="post">
 <input type="hidden" name="originalPostContent" value ="${post.content}">
@@ -87,20 +87,20 @@ function formSubmitter(formTag, messageTag){
 
 
 
-<table border="5">
+<table>
   <tr>
-    <th><b> <font color="#ef4e01">Create Post</font> </b></th>
+    <th> Create Post</th>
   </tr>
   <tr>
     <td>
     
     <form action="/social/pageTimeLineController/ResponseCreatePagePost" method="post">
  
- <textarea rows="4" cols="50" name="content" placeholder="What's on your mind ?">
-</textarea>
+ <textarea rows="4" cols="50" name="content">
+What's on your mind ?!</textarea>
  <br>
  <br>
-<b> <font color="#ef4e01">Privacy</font> </b>
+Privacy :
 <br>
 <input type="radio" name="privacy" value="public">public<br>
 <input type="radio" name="privacy" value="private">private<br>
@@ -110,7 +110,6 @@ function formSubmitter(formTag, messageTag){
 <input type="hidden" name="pageOwner" value ="${user.content}">
 <input type="hidden" name="pageName" value ="${user.privacy}">
 </c:forEach>
-<br>
 <input type="submit" value="Post" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
 </form>
      
@@ -119,7 +118,7 @@ function formSubmitter(formTag, messageTag){
   </tr>
   
 </table>
-<br>
+
 <br>
 <form action="/social/pageTimeLineController/ResponseLoadPageTimeLine" method="post">
 <c:forEach items = "${it.mail}" var="user">
@@ -138,25 +137,6 @@ function formSubmitter(formTag, messageTag){
   </form>
   
   <br>
-
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
 
 </body>
 </html>

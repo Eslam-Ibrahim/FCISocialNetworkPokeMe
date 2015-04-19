@@ -6,14 +6,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Page TimeLine</title>
-
+</head>
 <style>
-     <%@ include file="style.css"%>
+table, td, th {
+    border: 1px solid gray;
+}
+
+th {
+    background-color: blue;
+    color: white;
+}
+h1
+{
+text-align:center;
+font-family:courier;
+color: #cf9118;
+}
 </style>
 
-</head>
-
-<body  bgcolor="#181819">
+<body>
 <script language="JavaScript">
 function formSubmitterLike(formTag, messageTag){
 	  document.getElementById(messageTag).innerHTML = "Liked Successfully";
@@ -22,27 +33,9 @@ function formSubmitterLike(formTag, messageTag){
 
 </script>
 
-
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-                <h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.privacy}"> </c:out> </c:forEach>Page</h1>
-            
-            
-            </div>
-
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
-
-        <div id="header2">  
-
-            <div id="text_inside_header2">
-			
-			 <form action="/social/pageController/ResponseLikePageForUser" method="post">
+<h1>Welcome To <c:forEach items = "${it.mail}" var="user"> <c:out value = "${user.privacy}"> </c:out> </c:forEach>Page</h1>
+<br>
+ <form action="/social/pageController/ResponseLikePageForUser" method="post">
 <c:forEach items = "${it.mail}" var="user">
 <input type="hidden" name="pageID" value ="${user.pageID}">
 <input type="hidden" name="pageOwner" value ="${user.content}">
@@ -105,25 +98,5 @@ function formSubmitterLike(formTag, messageTag){
   
   <br>
 
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
-
 </body>
-
 </html>

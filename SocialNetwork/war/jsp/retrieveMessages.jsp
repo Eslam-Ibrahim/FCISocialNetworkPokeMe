@@ -1,19 +1,30 @@
-
+<%@ taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Retrieve Messages History</title>
-
-
 <style>
-     <%@ include file="style.css"%>
+table, td, th {
+    border: 1px solid green;
+}
+
+th {
+    background-color: green;
+    color: white;
+}
+textarea 
+{
+  color: black;
+  opacity: 0.7; 
+  filter:alpha(opacity=70); 
+    
+}
 </style>
-
-
 </head>
 
-<body  bgcolor="#181819">
+<body>
 <script language="JavaScript">
 function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "Message Sent";
@@ -22,52 +33,59 @@ function formSubmitter(formTag, messageTag){
 
 </script>
 
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-                <h2>Message Flow between ${it.email} And ${it.friendMail}</h2>
-            
-            
-            </div>
 
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
 
-        <div id="header2">  
 
-            <div id="text_inside_header2">
-			
-			
+
 <table>
   <tr>
-    <td> ${it.Messages}</td>
-    
+    <th>Message Flow between <c:forEach items = "${it.mails}" var="user">  
+     <c:out value="${user.receiverMail}"/> And <c:out value="${user.senderMail}"/>  
+    </c:forEach></th>
   </tr>
-  
+  <tr>
+    <td> 
+    
+       <c:forEach items = "${it.messages}" var="messageObject">
+       
+       <c:out value="${ messageObject.senderMail}"/>
+       <br>
+      <c:out value="${ messageObject.content}"/>
+      <br>
+     Date:  <c:out value="${ messageObject.date}"/> 
+     <br>
+     ------------------------------------------------------------------------------------------------------------
+     <br>
+       </c:forEach>
+    </td>
+  </tr>
 </table>
 
 <br>
 
-
-<form action="/social/ResponseSendMessage" method="post">
- 
-
-<h3> <b> <font color="#ef4e01">Message</font> </b> </h3>
-<textarea rows="4" cols="50" name="messageContents" placeholder="Write a reply"></textarea>
 <br>
-<input type="hidden" name="recieverMail" value ="${it.friendMail}">
-<input type="hidden" name="senderMail" value ="${it.email}">
+<br>
+<form action="/social/MessageController/ResponseSendMessage" method="post">
+ 
+Message :
+<br>
+<textarea rows="4" cols="50" name="messageContents">
+Type Something!</textarea>
+<br>
+<c:forEach items = "${it.mails}" var="user">
+<input type="hidden" name="recieverMail" value ="${user.senderMail}">
+<input type="hidden" name="senderMail" value ="${user.receiverMail}">
+</c:forEach>
 <input type="submit" value="Send Message" onclick="formSubmitter('sampleform', 'message')"><div id='message'></div>
 
 </form>
+
 <br>
-<form action="/social/ResponseRetriveMessageHistory" method="post">
-<input type="hidden" name="senderMail" value ="${it.friendMail}">
-<input type="hidden" name="receiverMail" value ="${it.email}">
+<form action="/social/MessageController/ResponseRetriveMessageHistory" method="post"> 
+<c:forEach items = "${it.mails}" var="user">
+<input type="hidden" name="senderMail" value ="${user.senderMail}">
+<input type="hidden" name="receiverMail" value ="${user.receiverMail}">
+</c:forEach>
 <input type="submit" value="Refresh">
 </form>
 <br>
@@ -77,25 +95,5 @@ function formSubmitter(formTag, messageTag){
   <input type="submit" value="Back To  HomePage">
   </form>
   <br>
-
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
-
 </body>
 </html>

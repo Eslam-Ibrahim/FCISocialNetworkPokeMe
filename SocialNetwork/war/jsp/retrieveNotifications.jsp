@@ -5,15 +5,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Retrieve Notifications Page</title>
-
-<style>
-     <%@ include file="style.css"%>
-</style>
-
 </head>
+<style>
+table, td, th {
+    border: 1px solid gray;
+}
 
-<body  bgcolor="#181819">
-
+th {
+    background-color: blue;
+    color: white;
+}
+h1
+{
+text-align:center;
+font-family:courier;
+color: #cf9118;
+}
+</style>
+<body>
 <script language="JavaScript">
 function formSubmitter(formTag, messageTag){
   document.getElementById(messageTag).innerHTML = "You Are Now Friends";
@@ -22,30 +31,15 @@ function formSubmitter(formTag, messageTag){
 
 </script>
 
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-       			<h1> Notifications Center</h1>
-            
-            
-            </div>
 
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
-
-        <div id="header2">  
-
-            <div id="text_inside_header2">
-			
-			<br>
-<table border="5">
+ 
+    
+<h1> Notifications Center</h1>
+<br>
+<table>
   <tr>
-        <th><b> <font color="#ef4e01"><h2>Notification</h2></font> </b> </th>
-        <th><b> <font color="#ef4e01"><h2>Action</h2></font> </b> </th>
+    <th> Notification</th>
+    <th> Action</th>
   </tr>
   
     <c:forEach items = "${it.notifications}" var="notificationObject">
@@ -70,7 +64,7 @@ function formSubmitter(formTag, messageTag){
 	       Congratulations !
 	    </c:when>
 	    <c:when test="${notificationObject.type == 'Message'}">
-	       <form action="/social/ResponseRetriveMessageHistory" method="post"> 
+	      <form action="/social/MessageController/ResponseRetriveMessageHistory" method="post"> 
 	           <input type="hidden" name="senderMail" value = "${notificationObject.senderMail}">
 	           <input type="hidden" name="receiverMail" value ="${notificationObject.recieverMail}">
 	           <input type="submit" value="Chat Now !">
@@ -124,25 +118,6 @@ function formSubmitter(formTag, messageTag){
   <input type="submit" value="Back To  HomePage">
   </form>
   <br>
-
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
 
 </body>
 </html>

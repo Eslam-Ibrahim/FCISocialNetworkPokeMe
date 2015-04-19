@@ -315,83 +315,8 @@ public class UserEntity {
 					}
 					return requestNames;
 				}
+								
 				
-				// Save Message
-				public static void saveMessage(String senderMail , String receiverMail , String content) {
-					
-					DatastoreService datastore = DatastoreServiceFactory
-							.getDatastoreService();
-					// Determine Message Date
-					DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		            Date newDate = new Date();
-		            newDateFormat.format(newDate);
-		            int date = newDate.getDate();
-		            int month = newDate.getMonth() + 1;
-		            int year = newDate.getYear() + 1900;
-		            String MessageDate = date + "/" + month + "/" + year;
-		            Query gaeQuery = new Query("Messages");
-		    		PreparedQuery pq = datastore.prepare(gaeQuery);
-		    		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-		    		int tempID;
-		            if (list.isEmpty())
-		            {
-		            	tempID = 0;
-		            }
-		            else
-		            {tempID = list.size();}
-		            
-		    		Entity tempRecord = new Entity("Messages", tempID+ 1);
-
-		    		tempRecord.setProperty("sender", senderMail);
-		    		tempRecord.setProperty("receiver",receiverMail );
-		    		tempRecord.setProperty("date",MessageDate);
-		    		tempRecord.setProperty("content",content);
-		    		datastore.put(tempRecord);
-		    		// Add notification
-		    	    String Notificationcontent = senderMail+" Has just sent to you a Message";
-		    	    NotificationsEntity.saveNotification(senderMail, receiverMail, Notificationcontent,"Message");
-				}
-				
-				// Retrieve Messages
-				public static ArrayList <String> retrieveMessages (String receiverMail , String senderMail) {
-					
-					DatastoreService datastore = DatastoreServiceFactory
-							.getDatastoreService();
-					ArrayList<String> retMessages = new ArrayList<>();
-					System.out.println("sender: "+senderMail);
-					System.out.println("receiver: "+receiverMail);
-		          // Friend --> current user  (1)
-		         Filter senderMailFilter = new FilterPredicate("sender", FilterOperator.EQUAL,senderMail);	
-		   	     Filter recieverMailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);
-		   		//Use CompositeFilter to combine multiple filters
-		   		Filter CompositeFilter1 = CompositeFilterOperator.and(senderMailFilter, recieverMailFilter);
-		   		// current user --> Friend   (2)
-		   		Filter senderMailFilter2 = new FilterPredicate("sender", FilterOperator.EQUAL,receiverMail);	
-		   	     Filter recieverMailFilter2 = new FilterPredicate("receiver", FilterOperator.EQUAL,senderMail);
-		   		//Use CompositeFilter to combine multiple filters
-		   		Filter CompositeFilter2 = CompositeFilterOperator.and(senderMailFilter2, recieverMailFilter2);
-		   		// combine (1) OR (2)
-		   		Filter FinalCompositeFilter = CompositeFilterOperator.or (CompositeFilter1,CompositeFilter2);
-		   		// Use class Query to assemble a query
-		   		Query gaeQuery = new Query("Messages").setFilter(FinalCompositeFilter);
-		   		PreparedQuery pq = datastore.prepare(gaeQuery);
-		   		//System.out.println("senderMail-> "+senderMail + " ,receiverMail-> "+receiverMail);
-		   		for (Entity entity : pq.asIterable()) {
-		   			//System.out.println("I am Here in retMessage");
-		   			//if((entity.getProperty("sender").equals(senderMail)&&entity.getProperty("receiver").equals(receiverMail))||
-		   		      //  (entity.getProperty("sender").equals(receiverMail)&&entity.getProperty("receiver").equals(senderMail)))
-		   			{
-		   				//System.out.println("I am Here in retMessage condition");
-		   			String messageRecord="";
-		   			messageRecord = entity.getProperty("sender").toString() + " Said: ";
-		   			messageRecord += entity.getProperty("content").toString() + " on: ";
-		   			messageRecord += entity.getProperty("date").toString()+" # ";
-		   			retMessages.add(messageRecord);
-		   		    }
-		   		}
-		            return retMessages;
-				
-         }
 				
 				public static UserEntity parseUserInfo(String jsonString) {
 				     

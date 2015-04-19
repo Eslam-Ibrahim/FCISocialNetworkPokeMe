@@ -432,58 +432,9 @@ public class UserController {
 	}
 	
 	    @POST
-		@Path("/ResponseSendMessage")
+		@Path("/ResponseRetrieveFriends")
 		@Produces("text/html")
-		public void responseSendMessage(@FormParam("senderMail") String senderMail , @FormParam("recieverMail") String receiverMail 
-				,@FormParam("messageContents") String content) {
-	    //	String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/sendMessage";
-			String serviceUrl = "http://localhost:8888/rest/sendMessage";
-			try {
-				URL url = new URL(serviceUrl);
-				String urlParameters = "senderMail=" + senderMail + "&recieverMail=" + receiverMail
-						+ "&messageContents=" + content;
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
-				connection.setDoOutput(true);
-				connection.setDoInput(true);
-				connection.setInstanceFollowRedirects(false);
-				connection.setRequestMethod("POST");
-				connection.setConnectTimeout(60000);  //60 Seconds
-				connection.setReadTimeout(60000);  //60 Seconds
-				
-				connection.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded;charset=UTF-8");
-				OutputStreamWriter writer = new OutputStreamWriter(
-						connection.getOutputStream());
-				writer.write(urlParameters);
-				writer.flush();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
-						connection.getInputStream()));
-
-				String line ,retjson= "";
-				Map<String, String> map = new HashMap<String, String>();
-				while ((line = reader.readLine()) != null) {
-					retjson+=line;
-				}
-				writer.close();
-				reader.close();			
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}
-
-			
-
-		}
-	    
-	    
-	    @POST
-		@Path("/ResponseRetrieveMessage")
-		@Produces("text/html")
-		public Response ResponseRetrieveMessage(@FormParam("myEmail") String myEmail) {
+		public Response retrieveFriends(@FormParam("myEmail") String myEmail) {
 	    	//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/retrieveFriends";
 			String serviceUrl = "http://localhost:8888/rest/retrieveFriends";
 			try {
@@ -549,77 +500,6 @@ public class UserController {
 		}
 	    
 	    
-	    @POST
-		@Path("/ResponseRetriveMessageHistory")
-		@Produces("text/html")
-		public Response ResponseRetriveMessageHistory(@FormParam("receiverMail") String receiverMail , @FormParam("senderMail") String senderMail) {
-			//String serviceUrl = "http://pokemesocailnetwork.appspot.com/rest/RetriveMessageHistory";
-			String serviceUrl = "http://localhost:8888/rest/RetriveMessageHistory";
-			
-			try {
-				URL url = new URL(serviceUrl);
-				String urlParameters = "receiverMail=" + receiverMail+"&senderMail=" + senderMail ;
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
-				connection.setDoOutput(true);
-				connection.setDoInput(true);
-				connection.setInstanceFollowRedirects(false);
-				connection.setRequestMethod("POST");
-				connection.setConnectTimeout(60000);  //60 Seconds
-				connection.setReadTimeout(60000);  //60 Seconds
-				
-				connection.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded;charset=UTF-8");
-				OutputStreamWriter writer = new OutputStreamWriter(
-						connection.getOutputStream());
-				writer.write(urlParameters);
-				writer.flush();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(
-						connection.getInputStream()));
-
-				String line ,retjson= "";
-				Map<String, String> map = new HashMap<String, String>();
-				while ((line = reader.readLine()) != null) {
-					retjson+=line;
-				}
-				writer.close();
-				reader.close();
-				JSONParser parser = new JSONParser();
-				Object obj = parser.parse(retjson);
-			    JSONObject object = (JSONObject) obj;
-			    JSONArray list= (JSONArray) object.get("Messages");
-			    String retMessages = "";
-			   // String newLine = "\n";
-			    for(Integer i=0;i<list.size();i++){
-						
-			    	retMessages+=list.get(i).toString();
-			    	retMessages+="\n";
-			    }
-			    map.put("Messages",retMessages);
-			    map.put("email", UserController.userMail);
-			    map.put("friendMail", senderMail);
-			  //  System.out.println(map.get("retMessages"));
-				if (map.isEmpty())
-					return Response.ok(new Viewable("/jsp/retrieveMessages")).build();
-			
-				
-		
-				return Response.ok(new Viewable("/jsp/retrieveMessages",map)).build();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}  catch (ParseException e){
-			e.printStackTrace();
-		}
-
-			return null;
-
-		}
-
-
 	    //retrieve friends to access their timeLine
 	    @POST
 		@Path("/ResponseViewFriends")

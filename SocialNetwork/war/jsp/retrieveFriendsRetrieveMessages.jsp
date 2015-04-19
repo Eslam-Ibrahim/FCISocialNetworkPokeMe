@@ -5,41 +5,32 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Retrieve Messages</title>
-
-<style>
-     <%@ include file="style.css"%>
-</style>
-
 </head>
+<style>
+table, td, th {
+    border: 1px solid gray;
+}
 
-<body  bgcolor="#181819">
-    <div id="container">
-        <br />
-        
-        <div id="header1">
-            <div id="textinsideheader1">
-              
-                <h1> Messages</h1>
-            
-            
-            </div>
-
-        </div> <!--end of id=header1 -->
-        
-        <br /><br />
-
-        <div id="header2">  
-
-            <div id="text_inside_header2">
-			
-			
+th {
+    background-color: blue;
+    color: white;
+}
+h1
+{
+text-align:center;
+font-family:courier;
+color: #cf9118;
+}
+</style>
+<body>
 
 
+<h1> Messages</h1>
 <br>
-<table border="5">
+<table>
   <tr>
-    <th><b> <font color="#ef4e01"><h3> Friends List</h3></font> </b></th>
-    <th><b> <font color="#ef4e01"><h3> Chat</h3></font> </b></th>
+    <th> Friends List</th>
+    <th> Chat</th>
   </tr>
   
     <c:forEach items = "${it.mails}" var="sender">
@@ -49,7 +40,7 @@
      </td>
   <td>
     <c:forEach items = "${it.mail}" var="user">
-<form action="/social/ResponseRetriveMessageHistory" method="post"> 
+<form action="/social/MessageController/ResponseRetriveMessageHistory" method="post"> 
 <input type="hidden" name="senderMail" value = "${sender.email}">
 <input type="hidden" name="receiverMail" value ="${user.email}">
   <input type="submit" value="Chat Now !">
@@ -75,25 +66,5 @@
   <input type="submit" value="Back To  HomePage">
   </form>
   <br>
-
-            </div> <!--end of text inside header 2 -->
-            
-        </div> <!--end of header2 -->
-
-        
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-
-
-        <br />
-        <br />
-
-    </div> <!--end of container-->
-    <br />
-    <br />
-
 </body>
 </html>
