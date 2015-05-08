@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="9" passed="9">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="275" started-at="2015-05-08T20:57:47Z" finished-at="2015-05-08T20:57:47Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="275" started-at="2015-05-08T20:57:47Z" finished-at="2015-05-08T20:57:47Z">
+      <class name="FrontEndTesting.ServiceTest">
+        <test-method status="PASS" signature="SendFriendRequest(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="SendFriendRequest" duration-ms="83" started-at="2015-05-08T23:57:47Z" data-provider="DPSendRequest" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[OK]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[eom_realmadrid@live.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[hassan@yahoo.com]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SendFriendRequest -->
+        <test-method status="PASS" signature="SendFriendRequest(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="SendFriendRequest" duration-ms="17" started-at="2015-05-08T23:57:47Z" data-provider="DPSendRequest" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[eom_realmadrid@live.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[23]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SendFriendRequest -->
+        <test-method status="PASS" signature="SendFriendRequest(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="SendFriendRequest" duration-ms="16" started-at="2015-05-08T23:57:47Z" data-provider="DPSendRequest" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[eom_realmadrid@live.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SendFriendRequest -->
+        <test-method status="PASS" signature="SendFriendRequest(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="SendFriendRequest" duration-ms="17" started-at="2015-05-08T23:57:47Z" data-provider="DPSendRequest" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SendFriendRequest -->
+        <test-method status="PASS" signature="loginService(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="loginService" duration-ms="19" started-at="2015-05-08T23:57:47Z" data-provider="DP" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[OK]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Eslam]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[123]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginService -->
+        <test-method status="PASS" signature="loginService(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="loginService" duration-ms="17" started-at="2015-05-08T23:57:47Z" data-provider="DP" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Eslam]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[23]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginService -->
+        <test-method status="PASS" signature="loginService(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="loginService" duration-ms="17" started-at="2015-05-08T23:57:47Z" data-provider="DP" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[Eslam]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginService -->
+        <test-method status="PASS" signature="loginService(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="loginService" duration-ms="18" started-at="2015-05-08T23:57:47Z" data-provider="DP" finished-at="2015-05-08T23:57:47Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Failed]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginService -->
+        <test-method status="PASS" signature="registrationService()[pri:0, instance:FrontEndTesting.ServiceTest@a60d19]" name="registrationService" duration-ms="27" started-at="2015-05-08T23:57:47Z" finished-at="2015-05-08T23:57:47Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- registrationService -->
+      </class> <!-- FrontEndTesting.ServiceTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

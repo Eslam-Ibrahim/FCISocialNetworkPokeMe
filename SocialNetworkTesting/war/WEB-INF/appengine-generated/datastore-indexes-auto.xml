@@ -1,0 +1,18 @@
+<!-- Indices written at Fri, 8 May 2015 23:56:11 EEST -->
+
+<datastore-indexes>
+
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="UserPosts" ancestor="false" source="auto">
+        <property name="postLocation" direction="asc"/>
+        <property name="postOwner" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 10 times in query history -->
+    <datastore-index kind="Pages" ancestor="false" source="auto">
+        <property name="category" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="pageOwner" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>
