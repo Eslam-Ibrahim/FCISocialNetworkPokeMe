@@ -30,6 +30,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.FCI.SWE.Models.UserEntity;
+import com.FCI.SWE.Models.PagePost.Builder;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -41,11 +42,7 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.apphosting.utils.config.ClientDeployYamlMaker.Request;
-
-
 public class UserPost {
-	
-	
 	private String postOwner;
 	private String postLocation;
 	private String content;
@@ -54,6 +51,68 @@ public class UserPost {
 	private String privacy;
 	private long numberOflikes;
 	private long postID;
+	////////////
+	public static class Builder {
+		private String postOwner;
+		private String postLocation;
+		private String content;
+		private String feelings;
+		private String date;
+		private String privacy;
+		private long numberOflikes;
+		private long postID;
+		
+		 public Builder()
+		 {
+			 
+		 }
+		 
+		 public Builder postOwner(String posOwner)  
+	       { this.postOwner = postOwner;       return this; }
+		
+		 public Builder postLocation(String postLocation)  
+	       { this.postLocation = postLocation;       return this; }
+		
+		 public Builder content(String content)  
+	       { this.content = content;       return this; }
+		
+		 public Builder feelings(String feelings)  
+	       { this.feelings = feelings;       return this; }
+		
+		 public Builder date(String date)  
+	       { this.date = date;       return this; }
+		
+		 public Builder privacy(String privacy)  
+	       { this.privacy = privacy;       return this; }
+		
+		 public Builder numberOflikes(long numberOflikes)  
+	       { this.numberOflikes = numberOflikes;       return this; }
+		
+		 public Builder postID(long postID)  
+	       { this.postID = postID;       return this; }
+		
+		 public UserPost build() 
+		 {  
+		       return new UserPost(this);
+	     }
+	}
+	
+	private UserPost(Builder builder) {
+		builder.postID=postID;
+		builder.feelings=feelings;
+		builder.content=content;
+		builder.date=date;
+		builder.numberOflikes=numberOflikes;
+		builder.postLocation=postLocation;
+		builder.postOwner=postOwner;
+		builder.privacy=privacy;
+}
+
+	
+	
+	
+	////////////
+	
 	public UserPost()
 	{
 		postOwner="";
@@ -130,9 +189,7 @@ public class UserPost {
 	}
 
 	// Load Posts 
-	public ArrayList <UserPost> loadPosts(String userMail)
-	{
-
+	public ArrayList <UserPost> loadPosts(String userMail)	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		ArrayList <UserPost> retPosts = new ArrayList <>();
@@ -152,11 +209,7 @@ public class UserPost {
 		Query gaeQuery = new Query("UserPosts").setFilter(FinalCompositeFilter);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
-			//System.out.println("I am Here in retMessage");
-			//if((entity.getProperty("sender").equals(senderMail)&&entity.getProperty("receiver").equals(receiverMail))||
-		      //  (entity.getProperty("sender").equals(receiverMail)&&entity.getProperty("receiver").equals(senderMail)))
 			{
-				//System.out.println("I am Here in retMessage condition");
 				UserPost postsRecord = new UserPost();
 			    postsRecord.setPostOwner(entity.getProperty("postOwner").toString());
 			    postsRecord.setContent(entity.getProperty("content").toString());
@@ -167,13 +220,7 @@ public class UserPost {
 			    retPosts.add(postsRecord);
 		    }
 		}
-         for (int i = 0; i < retPosts.size(); i++) {
-			
-        	 System.out.println(retPosts.get(i).toString());
-		}
-	
-		return retPosts;
-		
+     	return retPosts;
 	}
 	
 	// Save Post
@@ -183,13 +230,7 @@ public class UserPost {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		// Determine post Date
-		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date newDate = new Date();
-        newDateFormat.format(newDate);
-        int PDate = newDate.getDate();
-        int month = newDate.getMonth() + 1;
-        int year = newDate.getYear() + 1900;
-        String postDate = PDate + "/" + month + "/" + year;
+		String postDate = MessageEntity.returnNowDate();
         Query gaeQuery = new Query("UserPosts");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
@@ -237,7 +278,6 @@ public class UserPost {
 			post.setPostID(Long.parseLong( object.get("postID").toString()));
 			return post;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -252,7 +292,4 @@ public class UserPost {
 				+ ", numberOflikes=" + numberOflikes + ", postID=" + postID
 				+ "]";
 	}
-
-	
-	
 }

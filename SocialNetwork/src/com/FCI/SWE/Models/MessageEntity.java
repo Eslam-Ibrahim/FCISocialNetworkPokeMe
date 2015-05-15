@@ -78,6 +78,18 @@ public class MessageEntity {
 				+ "]";
 	}
 	
+	public static String returnNowDate()
+	{
+		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date newDate = new Date();
+        newDateFormat.format(newDate);
+        int date = newDate.getDate();
+        int month = newDate.getMonth() + 1;
+        int year = newDate.getYear() + 1900;
+        String MessageDate = date + "/" + month + "/" + year;
+        
+        return MessageDate;
+	}
 	
 
 	// Save Message
@@ -86,13 +98,9 @@ public class MessageEntity {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		// Determine Message Date
-		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date newDate = new Date();
-        newDateFormat.format(newDate);
-        int date = newDate.getDate();
-        int month = newDate.getMonth() + 1;
-        int year = newDate.getYear() + 1900;
-        String MessageDate = date + "/" + month + "/" + year;
+		String MessageDate = MessageEntity.returnNowDate();
+        
+        
         Query gaeQuery = new Query("Messages");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());

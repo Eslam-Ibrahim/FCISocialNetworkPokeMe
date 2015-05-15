@@ -1,5 +1,4 @@
 package com.FCI.SWE.Models;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,12 +41,8 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.apphosting.utils.config.ClientDeployYamlMaker.Request;
-
 public class PagePost {
-
-	
-	
-	private long pageID;	
+	private long pageID ;	
 	private long PostID;
 	private String postOwner;
 	private String content;
@@ -55,6 +50,68 @@ public class PagePost {
 	private String date;
 	private long numberOfLikes;
 	private long numberOfSeens;
+	///////
+	
+	
+	public static class Builder {
+		 private long pageID ;
+		 private long PostID;
+		 private String postOwner;
+		private String content;
+		private String privacy;
+		private String date;
+		private long numberOfLikes;
+		private long numberOfSeens;
+		
+		 public Builder()
+		 {
+			 
+		 }
+	 	
+		 public Builder pageID(long pageID)  
+	       { this.pageID = pageID;       return this; }
+		 
+		 public Builder postID(long postID)  
+	       { PostID = postID;       return this; }
+		 
+		 public Builder postOwner(String postOwner)  
+	       { this.postOwner = postOwner;       return this; }
+		 
+		 public Builder content(String content)  
+	       { this.content = content;       return this; }
+		
+		 public Builder privacy(String privacy)  
+	       { this.privacy = privacy;       return this; }
+		
+		 public Builder date(String date)  
+	       { this.date = date;       return this; }
+		
+		 public Builder numberOfLikes(long numberOfLikes)  
+	       { this.numberOfLikes = numberOfLikes;       return this; }
+		
+		 public Builder numberOfSeens(long numberOfSeens)  
+	       { this.numberOfSeens = numberOfSeens;       return this; }
+		
+		 public PagePost build() 
+		 {  
+		       return new PagePost(this);
+	     }
+		 
+	 }
+	
+	private PagePost(Builder builder) {
+		builder.pageID=pageID;
+		builder.PostID=PostID;
+		builder.content=content;
+		builder.date=date;
+		builder.numberOfLikes=numberOfLikes;
+		builder.numberOfSeens=numberOfSeens;
+		builder.postOwner=postOwner;
+		builder.privacy=privacy;
+}
+	
+	
+	///////
 	public long getPageID() {
 		return pageID;
 	}
@@ -79,7 +136,8 @@ public class PagePost {
 	public long getNumberOfSeens() {
 		return numberOfSeens;
 	}
-	public PagePost(long pageID, long postID, String postOwner, String content,
+	
+	/*public PagePost(long pageID, long postID, String postOwner, String content,
 			String privacy, String date, long numberOfLikes, long numberOfSeens) {
 		super();
 		this.pageID = pageID;
@@ -90,7 +148,8 @@ public class PagePost {
 		this.date = date;
 		this.numberOfLikes = numberOfLikes;
 		this.numberOfSeens = numberOfSeens;
-	}
+	}*/
+	
 	@Override
 	public String toString() {
 		return "PagePost [pageID=" + pageID + ", PostID=" + PostID
@@ -100,8 +159,6 @@ public class PagePost {
 				+ numberOfSeens + "]";
 	}
 	
-	
-	
 	public static PagePost parsePagePostInfo(String jsonString)
 	{
 		JSONParser parser = new JSONParser();
@@ -109,33 +166,38 @@ public class PagePost {
 		try {
 			JSONObject object  = (JSONObject) parser.parse(jsonString);
 
-			PagePost post = new PagePost( 
+			PagePost pagepost = new PagePost.Builder().pageID(Long.parseLong(object.get("pageID").toString()))
+					.postID(Long.parseLong(object.get("postID").toString()))
+					.postOwner(object.get("postOwner").toString())
+					.content(object.get("content").toString())
+					.privacy(object.get("privacy").toString())
+					.date(object.get("date").toString())
+					.numberOfLikes(Long.parseLong(object.get("numberOfLikes").toString()))
+					.numberOfSeens(Long.parseLong(object.get("numberOfSeens").toString()))
+					.build();
+			
+			
+		/*	PagePost post = new PagePost( 
 					Long.parseLong(object.get("pageID").toString()), Long.parseLong(object.get("postID").toString()), 
 					object.get("postOwner").toString(), object.get("content").toString(), object.get("privacy").toString(), 
 					object.get("date").toString(),
 					Long.parseLong(object.get("numberOfLikes").toString()), 
-					Long.parseLong(object.get("numberOfSeens").toString()));
-			return post;
+					Long.parseLong(object.get("numberOfSeens").toString()));*/
+			return pagepost;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return null;
 	}
 	// Save Post
+	//
 	public static void savePagePost(String pageOwner, String pageName,
 			long pageID, String postOwner, String content, String privacy) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		// Determine post Date
-		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date newDate = new Date();
-        newDateFormat.format(newDate);
-        int PDate = newDate.getDate();
-        int month = newDate.getMonth() + 1;
-        int year = newDate.getYear() + 1900;
-        String postDate = PDate + "/" + month + "/" + year;
+        String postDate = MessageEntity.returnNowDate();
         Query gaeQuery = new Query("pagePosts");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
@@ -185,25 +247,34 @@ public class PagePost {
 		for (Entity entity : pq.asIterable()) {
 			
 			{
-				PagePost postsRecord = new PagePost( Long.parseLong(entity.getProperty("pageID").toString())   
+				
+				PagePost pagepost = new PagePost.Builder().
+						pageID(Long.parseLong(entity.getProperty("pageID").toString()))
+						.postID(Long.parseLong(entity.getProperty("postID").toString()))
+						.postOwner(entity.getProperty("postOwner").toString())
+						.content(entity.getProperty("content").toString())
+						.privacy(entity.getProperty("privacy").toString())
+						.date(entity.getProperty("date").toString())
+						.numberOfLikes(Long.parseLong(entity.getProperty("numberOflikes").toString()))
+						.numberOfSeens(Long.parseLong(entity.getProperty("numberOfSeens").toString()))
+						.build();
+				
+				
+				/*PagePost postsRecord = new PagePost( Long.parseLong(entity.getProperty("pageID").toString())   
 						, Long.parseLong(entity.getProperty("postID").toString()), 
 						entity.getProperty("postOwner").toString(), entity.getProperty("content").toString(),
 						entity.getProperty("privacy").toString(), entity.getProperty("date").toString(), 
 						Long.parseLong(entity.getProperty("numberOflikes").toString()),
 						Long.parseLong(entity.getProperty("numberOfSeens").toString()));
-
-			    retPosts.add(postsRecord);
+*/
+			    retPosts.add(pagepost);
 		    }
 		}
          for (int i = 0; i < retPosts.size(); i++) {
 			
         	 System.out.println(retPosts.get(i).toString());
 		}
-	
 		return retPosts;
-		
-
-
 	}
 	// Load posts --> Regular User View - (public Posts only)
 	public static ArrayList<PagePost> loadPostsForUser(long pageID) {
@@ -221,27 +292,29 @@ public class PagePost {
 		Query gaeQuery = new Query("pagePosts").setFilter(CompositeFilter1);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
-			
 			{
-				PagePost postsRecord = new PagePost( Long.parseLong(entity.getProperty("pageID").toString())   
+	
+				PagePost pagepost = new PagePost.Builder().
+						pageID(Long.parseLong(entity.getProperty("pageID").toString()))
+						.postID(Long.parseLong(entity.getProperty("postID").toString()))
+						.postOwner(entity.getProperty("postOwner").toString())
+						.content(entity.getProperty("content").toString())
+						.privacy(entity.getProperty("privacy").toString())
+						.date(entity.getProperty("date").toString())
+						.numberOfLikes(Long.parseLong(entity.getProperty("numberOflikes").toString()))
+						.numberOfSeens(Long.parseLong(entity.getProperty("numberOfSeens").toString()))
+						.build();
+				
+				/*PagePost postsRecord = new PagePost( Long.parseLong(entity.getProperty("pageID").toString())   
 						, Long.parseLong(entity.getProperty("postID").toString()), 
 						entity.getProperty("postOwner").toString(), entity.getProperty("content").toString(),
 						entity.getProperty("privacy").toString(), entity.getProperty("date").toString(), 
 						Long.parseLong(entity.getProperty("numberOflikes").toString()),
 						Long.parseLong(entity.getProperty("numberOfSeens").toString()));
-
-			    retPosts.add(postsRecord);
+*/
+			    retPosts.add(pagepost);
 		    }
 		}
-         for (int i = 0; i < retPosts.size(); i++) {
-			
-        	 System.out.println(retPosts.get(i).toString());
-		}
-	
 		return retPosts;
-		
-
-
 	}
-
 }

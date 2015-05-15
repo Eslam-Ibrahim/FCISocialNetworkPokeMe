@@ -42,12 +42,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.apphosting.utils.config.ClientDeployYamlMaker.Request;
 
-
-
 public class NotificationsEntity {
-
-	
-	
 	private String senderMail;
 	private String receiverMail; 
 	private String content;
@@ -82,8 +77,7 @@ public class NotificationsEntity {
 		return type;
 	}
 
-	public NotificationsEntity(String senderMail, String recieverMail,
-			String content, String date , String type) {
+	public NotificationsEntity(String senderMail, String recieverMail,String content, String date , String type) {
 		super();
 		this.senderMail = senderMail;
 		this.receiverMail = recieverMail;
@@ -98,13 +92,7 @@ public class NotificationsEntity {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		// Determine Notification Date
-		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date newDate = new Date();
-        newDateFormat.format(newDate);
-        int date = newDate.getDate();
-        int month = newDate.getMonth() + 1;
-        int year = newDate.getYear() + 1900;
-        String notificationDate = date + "/" + month + "/" + year;
+        String notificationDate = MessageEntity.returnNowDate();
         Query gaeQuery = new Query("Notifications");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
@@ -134,13 +122,7 @@ public class NotificationsEntity {
 				.getDatastoreService();
 		ArrayList<NotificationsEntity> retNotifications = new ArrayList<>();
 		// Determine Notification Date
-		DateFormat newDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date newDate = new Date();
-        newDateFormat.format(newDate);
-        int date = newDate.getDate();
-        int month = newDate.getMonth() + 1;
-        int year = newDate.getYear() + 1900;
-        String notificationDate = date + "/" + month + "/" + year;
+		String notificationDate = MessageEntity.returnNowDate();
         
      Filter mailFilter = new FilterPredicate("receiver", FilterOperator.EQUAL,receiverMail);	
 	     Filter dateFilter = new FilterPredicate("date", FilterOperator.EQUAL,notificationDate);
@@ -167,7 +149,6 @@ public class NotificationsEntity {
 	public static NotificationsEntity parseNotificationInfo(String jsonString) {
 	     
 		JSONParser parser = new JSONParser();
-	     
 		try {
 			JSONObject object  = (JSONObject) parser.parse(jsonString);
 			NotificationsEntity notification = new NotificationsEntity(
@@ -186,4 +167,3 @@ public class NotificationsEntity {
 	}
 
 }
-

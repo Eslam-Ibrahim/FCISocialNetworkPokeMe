@@ -17,21 +17,14 @@ public class UserTimeline {
 	
 	UserPost myPosts = new UserPost();
 	// Load Posts 
-	public  ArrayList<UserPost>loadPosts(String userMail)
-	{
-
-		
+	public  ArrayList<UserPost>loadPosts(String userMail)	{
 		return myPosts.loadPosts(userMail);
 	}
-	
 	
 	// save post
 	public  void savePost(String postOwner, String postLocation ,String content , 
 	String feelings , String privacy) {
 		
 		myPosts.savePost(postOwner, postLocation, content, feelings, privacy);
-		
 	}
-	
-
 }
